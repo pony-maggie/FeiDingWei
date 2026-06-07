@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-007-room-shell
+**Active Feature:** feat-008-room-panels
 **Current Phase:** MVP implementation
 
 ## Status
@@ -23,17 +23,17 @@
 - [x] Completed `feat-005-pi-agent-runtime`.
 - [x] Completed `feat-006-api-routes`.
 - [x] Completed `feat-007-room-shell`.
+- [x] Completed `feat-008-room-panels`.
 
 ### What's In Progress
 
-- [ ] Start `feat-008-room-panels`.
+- [ ] Start `feat-009-e2e-workflow`.
 
 ### What's Next
 
-1. Start `feat-008-room-panels`.
-2. Add failing room tabs/panels tests.
-3. Implement Chat, Tasks, Docs, Agents panels and tab composition.
-4. Run `npm run test`, `npm run lint`, and `npm run build`.
+1. Start `feat-009-e2e-workflow`.
+2. Add Playwright E2E test for chat-to-agent-to-draft-artifacts-to-approval.
+3. Run `npm run test:e2e`.
 
 ## Blockers / Risks
 
@@ -91,6 +91,12 @@
 - `src/components/app-shell.tsx`: Added workspace and room shell.
 - `src/app/page.tsx`: Added default room redirect.
 - `src/app/rooms/[roomId]/page.tsx`: Added room page.
+- `src/components/__tests__/room-tabs.test.tsx`: Added room tab switching test.
+- `src/components/chat-panel.tsx`: Added chat and message form.
+- `src/components/tasks-panel.tsx`: Added task list and approval action.
+- `src/components/docs-panel.tsx`: Added doc list and approval action.
+- `src/components/agents-panel.tsx`: Added agents and activity view.
+- `src/components/room-tabs.tsx`: Added project room tab composition.
 
 ## Evidence of Completion
 
@@ -109,6 +115,8 @@
 - [x] App tests pass after API routes: `npm run test` reported 7 test files and 21 tests passed.
 - [x] AppShell test passes: `npm run test -- src/components/__tests__/app-shell.test.tsx` reported 1 test passed.
 - [x] App tests pass after room shell: `npm run test` reported 8 test files and 22 tests passed.
+- [x] RoomTabs test passes: `npm run test -- src/components/__tests__/room-tabs.test.tsx` reported 1 test passed.
+- [x] App tests pass after room panels: `npm run test` reported 9 test files and 23 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -116,4 +124,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-008-room-panels`. Keep the next step focused on interactive project room panels and tab navigation. Do not start E2E until panel tests and build pass.
+Start with `feat-009-e2e-workflow`. Keep the next step focused on browser-level verification of the MVP loop.
