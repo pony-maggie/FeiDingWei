@@ -10,3 +10,4 @@ prisma/dev.db-journal
 .env.*
 !.env.example
 .DS_Store
+*.tsbuildinfo
