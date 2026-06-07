@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-005-pi-agent-runtime
+**Active Feature:** feat-006-api-routes
 **Current Phase:** MVP implementation
 
 ## Status
@@ -21,16 +21,17 @@
 - [x] Completed `feat-003-database-schema`.
 - [x] Completed `feat-004-room-service`.
 - [x] Completed `feat-005-pi-agent-runtime`.
+- [x] Completed `feat-006-api-routes`.
 
 ### What's In Progress
 
-- [ ] Start `feat-006-api-routes`.
+- [ ] Start `feat-007-room-shell`.
 
 ### What's Next
 
-1. Start `feat-006-api-routes`.
-2. Add route handlers for messages and artifact approvals.
-3. Verify TypeScript/build and API behavior through later UI/E2E tests.
+1. Start `feat-007-room-shell`.
+2. Add root redirect, app shell, and room page.
+3. Verify room page build and route rendering.
 
 ## Blockers / Risks
 
@@ -78,6 +79,12 @@
 - `src/lib/agent-tools.ts`: Added Pi tools for draft task/doc creation.
 - `src/lib/pi-runtime.ts`: Added Pi faux provider agent factory.
 - `src/lib/agent-service.ts`: Added message persistence and agent run orchestration.
+- `src/app/api/__tests__/routes.test.ts`: Added API route tests.
+- `src/app/api/rooms/[roomId]/messages/route.ts`: Added message creation route.
+- `src/app/api/tasks/[taskId]/approve/route.ts`: Added task approval route.
+- `src/app/api/docs/[docId]/approve/route.ts`: Added document approval route.
+- `vitest.config.ts`: Added `@` alias resolution for tests.
+- `next.config.ts`: Externalized Pi packages for clean Next server build.
 
 ## Evidence of Completion
 
@@ -92,6 +99,8 @@
 - [x] App tests pass after room service: `npm run test` reported 4 test files and 11 tests passed.
 - [x] Agent runtime tests pass: `npm run test -- src/lib/__tests__/agent-tools.test.ts src/lib/__tests__/agent-service.test.ts` reported 6 tests passed.
 - [x] App tests pass after agent runtime: `npm run test` reported 6 test files and 17 tests passed.
+- [x] API route tests pass: `npm run test -- src/app/api/__tests__/routes.test.ts` reported 4 tests passed.
+- [x] App tests pass after API routes: `npm run test` reported 7 test files and 21 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -99,4 +108,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-006-api-routes`. Keep the next step focused on API endpoints. Do not start UI shell until API routes build cleanly.
+Start with `feat-007-room-shell`. Keep the next step focused on navigation and room shell. Do not start interactive panels until the room shell builds cleanly.

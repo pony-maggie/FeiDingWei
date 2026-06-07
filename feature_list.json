@@ -53,8 +53,8 @@
       "name": "Room And Approval API Routes",
       "description": "Add message creation endpoint, task approval endpoint, and document approval endpoint.",
       "dependencies": ["feat-005-pi-agent-runtime"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added failing API route tests first, then message, task approval, and document approval routes. Added Vitest alias config and Next serverExternalPackages for Pi packages. Verified route tests (4 passed), prisma seed, npm run test (21 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-6-add-api-routes"
     },
     {
