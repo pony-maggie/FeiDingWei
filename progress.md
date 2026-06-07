@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-003-database-schema
+**Active Feature:** feat-004-room-service
 **Current Phase:** MVP implementation
 
 ## Status
@@ -19,16 +19,17 @@
 - [x] Completed `feat-001-project-bootstrap`.
 - [x] Completed `feat-002-domain-model`.
 - [x] Completed `feat-003-database-schema`.
+- [x] Completed `feat-004-room-service`.
 
 ### What's In Progress
 
-- [ ] Start `feat-004-room-service`.
+- [ ] Start `feat-005-pi-agent-runtime`.
 
 ### What's Next
 
-1. Start `feat-004-room-service`.
-2. Add failing room service tests.
-3. Implement room loading, sorted messages, draft counts, and approval functions.
+1. Start `feat-005-pi-agent-runtime`.
+2. Add failing Pi agent tool/runtime tests.
+3. Implement room artifact tools and Pi-backed agent orchestration.
 4. Run `npm run test`, `npm run lint`, and `npm run build`.
 
 ## Blockers / Risks
@@ -70,6 +71,8 @@
 - `prisma/seed.ts`: Added deterministic MVP seed data.
 - `src/lib/db.ts`: Added Prisma singleton.
 - `src/lib/__tests__/db.test.ts`: Added seeded database test.
+- `src/lib/__tests__/room-service.test.ts`: Added room service tests.
+- `src/lib/room-service.ts`: Added room loading and artifact approval service.
 
 ## Evidence of Completion
 
@@ -80,6 +83,8 @@
 - [x] Prisma migration and seed pass: `npm run prisma:generate && npm run prisma:migrate -- --name init && npm run prisma:seed`.
 - [x] Database test passes: `npm run test -- src/lib/__tests__/db.test.ts` reported 1 test passed.
 - [x] App tests pass after database schema: `npm run test` reported 3 test files and 7 tests passed.
+- [x] Room service tests pass: `npm run test -- src/lib/__tests__/room-service.test.ts` reported 4 tests passed.
+- [x] App tests pass after room service: `npm run test` reported 4 test files and 11 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -87,4 +92,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-004-room-service`. Keep the next step focused on room loading and artifact approval. Do not start agent runtime code until room service tests pass.
+Start with `feat-005-pi-agent-runtime`. Keep the next step focused on Pi tools and agent orchestration. Do not start API routes until agent runtime tests pass.

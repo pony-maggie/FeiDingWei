@@ -35,8 +35,8 @@
       "name": "Project Room Service",
       "description": "Add room loading, sorted view model, draft counts, task approval, and document approval service functions.",
       "dependencies": ["feat-003-database-schema"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added failing room-service tests first, then implemented room view model, draft counts, room loading, and approval functions. Verified npm run test -- src/lib/__tests__/room-service.test.ts (4 passed), npm run test (11 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-4-add-room-service"
     },
     {
