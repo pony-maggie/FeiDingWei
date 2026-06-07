@@ -3,8 +3,8 @@
 ## Current Objective
 
 - Goal: Build FeiDingWei MVP, an open source agent-native project room.
-- Current status: Product design and implementation plan are written; iteration harness is now in place.
-- Branch / commit: This directory is not currently a Git repository.
+- Current status: MVP implementation complete and final verification passed.
+- Branch: `feature/mvp-implementation`.
 
 ## Completed This Session
 
@@ -13,18 +13,31 @@
 - [x] Wrote implementation plan.
 - [x] Revised implementation plan to reuse Pi agent infrastructure.
 - [x] Added iteration management harness files.
+- [x] Bootstrapped the Next.js, TypeScript, Tailwind, Prisma, Vitest, and Playwright app.
+- [x] Added Prisma schema, migration, seed data, and room service layer.
+- [x] Added Pi-backed agent runtime and artifact tools.
+- [x] Added message, task approval, and document approval API routes.
+- [x] Added project room shell, chat, tasks, docs, agents, and activity UI.
+- [x] Added unit, service, API, component, package-script, and E2E tests.
+- [x] Added README runbook.
+- [x] Completed final seed, test, lint, build, audit, and E2E verification.
 
 ## Verification Evidence
 
 | Check | Command | Result | Notes |
 |---|---|---|---|
-| File inventory | `find . -maxdepth 3 -type f \| sort` | Pass | Planning and harness files are present. |
-| App tests | `npm run test` | Not run | App scaffold does not exist yet. |
-| App build | `npm run build` | Not run | App scaffold does not exist yet. |
+| Seed data | `npm run prisma:seed` | Pass | Deterministic MVP data recreated. |
+| Test suite | `npm run test` | Pass | 11 test files, 25 tests. |
+| TypeScript | `npm run lint` | Pass | Runs `next typegen && tsc --noEmit`. |
+| Production build | `npm run build` | Pass | Next.js 16.2.7 build completed. |
+| Dependency audit | `npm audit --json` | Pass | 0 total vulnerabilities. |
+| Browser E2E | `npm run test:e2e` | Pass | 2 Playwright tests across desktop and mobile. |
+| Local smoke | Playwright opened `http://127.0.0.1:3100` | Pass | Title `FeiDingWei`; room heading and Chat tab visible. |
 
 ## Files Changed
 
 - `AGENTS.md`
+- `README.md`
 - `init.sh`
 - `feature_list.json`
 - `progress.md`
@@ -36,28 +49,44 @@
 - `docs/RELIABILITY.md`
 - `docs/superpowers/specs/2026-06-07-feidingwei-mvp-design.md`
 - `docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md`
+- `package.json`
+- `package-lock.json`
+- `.npmrc`
+- `.env.example`
+- `.gitignore`
+- `next.config.ts`
+- `postcss.config.mjs`
+- `tailwind.config.ts`
+- `tsconfig.json`
+- `vitest.config.ts`
+- `playwright.config.ts`
+- `prisma/**`
+- `src/**`
+- `tests/e2e/project-room.spec.ts`
 
 ## Decisions Made
 
-- FeiDingWei v0 is the first runnable MVP, not a reduced throwaway prototype.
+- FeiDingWei v0 is the first runnable MVP, not a throwaway prototype.
 - v0 includes workspace shell, project room, chat, tasks, docs, default agents, agent run history, and human approval.
-- Reuse Pi for agent runtime and provider infrastructure.
+- Reuse Pi for agent runtime, tool calling, and provider infrastructure.
+- Use Pi faux provider defaults for deterministic local tests and demos.
 - Use harness-style feature tracking and evidence-based completion.
+- Keep the MVP single-workspace and seeded; auth and broader enterprise modules are next-iteration work.
 
 ## Blockers / Risks
 
-- This directory needs `git init` before commit-based workflow can operate.
-- Node.js 22.19 or newer is required for the planned Pi dependencies.
-- `init.sh` will only run full verification after the app scaffold exists.
+- No active blocker remains for the MVP.
+- Real LLM provider configuration is not wired yet; the current agent behavior is deterministic by design.
+- Playwright emits Node `DEP0205` and `NO_COLOR`/`FORCE_COLOR` warnings under the current toolchain. Tests pass despite those warnings.
 
 ## Next Session Startup
 
 1. Read `AGENTS.md`.
-2. Read `feature_list.json` and `progress.md`.
-3. Review this handoff.
-4. Start `feat-001-project-bootstrap`.
-5. Run `./init.sh` before and after app bootstrap.
+2. Run `npm install` if dependencies are missing.
+3. Run `npm run prisma:seed`.
+4. Run `npm run dev -- --hostname 127.0.0.1 --port 3100`.
+5. Open `http://127.0.0.1:3100`.
 
 ## Recommended Next Step
 
-- Implement `feat-001-project-bootstrap` from `feature_list.json`.
+- Manual UX review in the local dev server, then choose the next iteration: visual polish, real provider configuration, authentication, or PR preparation.
