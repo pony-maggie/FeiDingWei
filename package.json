@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
+    "dev:local": "./start-local.sh",
     "build": "next build",
     "start": "next start",
     "lint": "next typegen && tsc --noEmit",
