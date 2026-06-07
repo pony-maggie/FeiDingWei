@@ -54,21 +54,37 @@ const room = {
 };
 
 describe("RoomTabs", () => {
-  it("switches between work panels", async () => {
+  it("renders Chinese labels by default and switches work panels", async () => {
     render(<RoomTabs room={room} />);
-    expect(screen.getByRole("heading", { name: "Chat" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "对话" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "English" })).toBeInTheDocument();
     expect(screen.getByText("Discussing the MVP")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "任务" }));
+    expect(screen.getByRole("heading", { name: "任务" })).toBeInTheDocument();
+    expect(screen.getByText("Clarify MVP")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "批准" })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "文档" }));
+    expect(screen.getByRole("heading", { name: "文档" })).toBeInTheDocument();
+    expect(screen.getByText("PRD Draft")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: "智能体" }));
+    expect(screen.getByRole("heading", { name: "智能体" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "运行记录" })).toBeInTheDocument();
+    expect(screen.getByText("PM Agent completed the run.")).toBeInTheDocument();
+  });
+
+  it("switches labels to English", async () => {
+    render(<RoomTabs room={room} />);
+
+    await userEvent.click(screen.getByRole("button", { name: "English" }));
+
+    expect(screen.getByRole("heading", { name: "Chat" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "中文" })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Tasks" }));
     expect(screen.getByRole("heading", { name: "Tasks" })).toBeInTheDocument();
-    expect(screen.getByText("Clarify MVP")).toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole("button", { name: "Docs" }));
-    expect(screen.getByRole("heading", { name: "Docs" })).toBeInTheDocument();
-    expect(screen.getByText("PRD Draft")).toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole("button", { name: "Agents" }));
-    expect(screen.getByRole("heading", { name: "Agents" })).toBeInTheDocument();
-    expect(screen.getByText("PM Agent completed the run.")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Approve" })).toBeInTheDocument();
   });
 });

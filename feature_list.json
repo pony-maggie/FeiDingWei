@@ -101,6 +101,15 @@
       "status": "pass",
       "evidence": "Final verification passed: npm run prisma:seed, npm run test (11 files, 25 tests passed), npm run lint (next typegen + tsc --noEmit passed), npm run build (Next 16.2.7 production build passed), npm audit --json (0 vulnerabilities), npm run test:e2e (2 Playwright tests passed across desktop and mobile). Local dev smoke passed at http://127.0.0.1:3100 with title FeiDingWei and room heading visible. E2E emitted Node/NO_COLOR deprecation warnings only; exit code was 0.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-11-final-verification"
+    },
+    {
+      "id": "feat-012-bilingual-ui-readme",
+      "name": "Bilingual UI And README",
+      "description": "Add Chinese-first UI labels, English language toggle, Chinese and English README files, and private Web deployment guidance.",
+      "dependencies": ["feat-011-final-verification"],
+      "status": "pass",
+      "evidence": "Added Chinese-first UI labels, English toggle, Chinese README.md, English README.en.md, and private Web deployment/no-key v0 guidance. Verified red tests before implementation for README and RoomTabs, then npm run test (11 files, 27 tests passed), npm run lint (next typegen + tsc passed), npm run build (Next 16.2.7 passed), npm audit --json (0 vulnerabilities), npm run test:e2e (2 Playwright tests passed across desktop and mobile), and local smoke at http://127.0.0.1:3100 with Chinese default heading and English toggle.",
+      "planReference": "docs/superpowers/plans/2026-06-07-bilingual-ui-and-readme.md"
     }
   ]
 }

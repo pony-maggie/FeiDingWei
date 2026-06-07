@@ -2,6 +2,7 @@
 
 import { CheckCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
+import type { Translation } from "@/lib/i18n";
 
 type RoomDocument = {
   id: string;
@@ -10,7 +11,13 @@ type RoomDocument = {
   artifactStatus: string;
 };
 
-export function DocsPanel({ documents }: { documents: RoomDocument[] }) {
+export function DocsPanel({
+  documents,
+  labels
+}: {
+  documents: RoomDocument[];
+  labels: Translation["docs"];
+}) {
   const router = useRouter();
 
   async function approve(documentId: string) {
@@ -20,7 +27,7 @@ export function DocsPanel({ documents }: { documents: RoomDocument[] }) {
 
   return (
     <section className="space-y-3 p-4">
-      <h2 className="text-lg font-semibold">Docs</h2>
+      <h2 className="text-lg font-semibold">{labels.heading}</h2>
       {documents.map((document) => (
         <article key={document.id} className="rounded border border-line bg-white p-4">
           <div className="flex items-start justify-between gap-4">
@@ -29,7 +36,11 @@ export function DocsPanel({ documents }: { documents: RoomDocument[] }) {
               <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded bg-paper p-3 text-sm">
                 {document.body}
               </pre>
-              <div className="mt-2 text-xs text-slate-500">{document.artifactStatus}</div>
+              <div className="mt-2 text-xs text-slate-500">
+                {labels.artifactStatus[
+                  document.artifactStatus as keyof typeof labels.artifactStatus
+                ] ?? document.artifactStatus}
+              </div>
             </div>
             {document.artifactStatus === "draft" ? (
               <button
@@ -37,7 +48,7 @@ export function DocsPanel({ documents }: { documents: RoomDocument[] }) {
                 className="inline-flex shrink-0 items-center gap-2 rounded border border-line px-3 py-2 text-sm"
               >
                 <CheckCircle className="h-4 w-4 text-success" aria-hidden="true" />
-                Approve
+                {labels.approve}
               </button>
             ) : null}
           </div>

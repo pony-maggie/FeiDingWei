@@ -12,7 +12,7 @@ export default async function HomePage() {
         <div className="max-w-md rounded border border-line bg-white p-6">
           <h1 className="text-xl font-semibold">FeiDingWei</h1>
           <p className="mt-2 text-sm text-slate-600">
-            Run the database seed command to create the first project room.
+            请先运行数据库 seed 命令，创建第一个项目房间。
           </p>
         </div>
       </main>
