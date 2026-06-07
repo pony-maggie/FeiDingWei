@@ -3,8 +3,8 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** harness-setup
-**Current Phase:** MVP planning and iteration management setup
+**Active Feature:** feat-001-project-bootstrap
+**Current Phase:** MVP implementation
 
 ## Status
 
@@ -16,23 +16,24 @@
 - [x] Wrote implementation plan at `docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md`.
 - [x] Revised the implementation plan to reuse `@earendil-works/pi-ai` and `@earendil-works/pi-agent-core`.
 - [x] Added project harness files for iteration management.
+- [x] Completed `feat-001-project-bootstrap`.
 
 ### What's In Progress
 
-- [ ] Prepare for MVP implementation from `feature_list.json`.
+- [ ] Start `feat-002-domain-model`.
 
 ### What's Next
 
-1. Review `feature_list.json`.
-2. Start `feat-001-project-bootstrap`.
-3. Initialize the Next.js + Prisma + Pi dependency scaffold.
-4. Run `./init.sh` after the scaffold exists.
+1. Start `feat-002-domain-model`.
+2. Add failing domain tests.
+3. Implement domain schemas, default agents, and mention extraction.
+4. Run `npm run test`, `npm run lint`, and `npm run build`.
 
 ## Blockers / Risks
 
 - [ ] The directory is not currently a Git repository, so commits cannot be created until `git init` runs.
-- [ ] The app scaffold does not exist yet, so `init.sh` currently performs planning-state verification only.
-- [ ] Pi packages require Node.js 22.19 or newer.
+- [x] The app scaffold exists.
+- [x] Pi packages require Node.js 22.19 or newer; current Node is v26.0.0.
 
 ## Decisions Made
 
@@ -57,14 +58,20 @@
 - `docs/PRODUCT.md`: Added product scope summary.
 - `docs/ARCHITECTURE.md`: Added architecture summary.
 - `docs/RELIABILITY.md`: Added reliability and verification summary.
+- `package.json`: Added Next.js, Prisma, Pi, test, and build dependencies.
+- `src/app/layout.tsx`: Added root layout and metadata.
+- `src/app/globals.css`: Added base Tailwind/global styles.
+- `src/app/__tests__/layout.test.tsx`: Added bootstrap metadata test.
 
 ## Evidence of Completion
 
 - [x] Harness files created.
-- [ ] App tests pass: app scaffold not created yet.
-- [ ] App build passes: app scaffold not created yet.
-- [ ] E2E workflow passes: app scaffold not created yet.
+- [x] App tests pass: `npm run test` reported 1 test file and 1 test passed.
+- [x] TypeScript check passes: `npm run lint` completed with exit code 0.
+- [x] App build passes: `npm run build` completed with exit code 0.
+- [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
+- [ ] E2E workflow passes: E2E app workflow not implemented yet.
 
 ## Notes For Next Session
 
-Start with `feat-001-project-bootstrap`. Keep the first implementation step focused on project initialization and dependency installation. Do not start UI, Prisma models, or agent runtime code until bootstrap is verified.
+Start with `feat-002-domain-model`. Keep the next step focused on domain schemas, default agents, and mention extraction. Do not start Prisma models until the domain tests pass.

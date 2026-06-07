@@ -128,29 +128,33 @@ Create these top-level files and directories:
     "@prisma/client": "5.22.0",
     "clsx": "2.1.1",
     "lucide-react": "0.468.0",
-    "next": "15.0.0",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
+    "next": "16.2.7",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "zod": "3.24.1"
   },
   "devDependencies": {
-    "@playwright/test": "1.49.0",
+    "@playwright/test": "1.60.0",
     "@testing-library/jest-dom": "6.6.3",
     "@testing-library/react": "16.1.0",
     "@testing-library/user-event": "14.5.2",
     "@types/node": "22.10.2",
-    "@types/react": "19.0.1",
-    "@types/react-dom": "19.0.2",
+    "@types/react": "18.2.79",
+    "@types/react-dom": "18.2.25",
     "autoprefixer": "10.4.20",
     "eslint": "9.17.0",
     "eslint-config-next": "15.0.0",
     "jsdom": "25.0.1",
-    "postcss": "8.4.49",
+    "postcss": "8.5.10",
     "prisma": "5.22.0",
     "tailwindcss": "3.4.17",
-    "tsx": "4.19.2",
+    "tsx": "4.22.4",
     "typescript": "5.7.2",
-    "vitest": "2.1.8"
+    "vitest": "4.1.8"
+  },
+  "overrides": {
+    "esbuild": "0.25.12",
+    "postcss": "8.5.10"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
