@@ -62,8 +62,8 @@
       "name": "Project Room UI Shell",
       "description": "Add root redirect, app shell, workspace sidebar, project room header, and initial room page.",
       "dependencies": ["feat-006-api-routes"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added failing AppShell component test first, then root redirect, room page, and workspace shell. Verified component test (1 passed), prisma seed, npm run test (22 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-7-add-project-room-ui-shell"
     },
     {

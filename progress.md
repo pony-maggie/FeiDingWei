@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-006-api-routes
+**Active Feature:** feat-007-room-shell
 **Current Phase:** MVP implementation
 
 ## Status
@@ -22,16 +22,18 @@
 - [x] Completed `feat-004-room-service`.
 - [x] Completed `feat-005-pi-agent-runtime`.
 - [x] Completed `feat-006-api-routes`.
+- [x] Completed `feat-007-room-shell`.
 
 ### What's In Progress
 
-- [ ] Start `feat-007-room-shell`.
+- [ ] Start `feat-008-room-panels`.
 
 ### What's Next
 
-1. Start `feat-007-room-shell`.
-2. Add root redirect, app shell, and room page.
-3. Verify room page build and route rendering.
+1. Start `feat-008-room-panels`.
+2. Add failing room tabs/panels tests.
+3. Implement Chat, Tasks, Docs, Agents panels and tab composition.
+4. Run `npm run test`, `npm run lint`, and `npm run build`.
 
 ## Blockers / Risks
 
@@ -85,6 +87,10 @@
 - `src/app/api/docs/[docId]/approve/route.ts`: Added document approval route.
 - `vitest.config.ts`: Added `@` alias resolution for tests.
 - `next.config.ts`: Externalized Pi packages for clean Next server build.
+- `src/components/__tests__/app-shell.test.tsx`: Added AppShell component test.
+- `src/components/app-shell.tsx`: Added workspace and room shell.
+- `src/app/page.tsx`: Added default room redirect.
+- `src/app/rooms/[roomId]/page.tsx`: Added room page.
 
 ## Evidence of Completion
 
@@ -101,6 +107,8 @@
 - [x] App tests pass after agent runtime: `npm run test` reported 6 test files and 17 tests passed.
 - [x] API route tests pass: `npm run test -- src/app/api/__tests__/routes.test.ts` reported 4 tests passed.
 - [x] App tests pass after API routes: `npm run test` reported 7 test files and 21 tests passed.
+- [x] AppShell test passes: `npm run test -- src/components/__tests__/app-shell.test.tsx` reported 1 test passed.
+- [x] App tests pass after room shell: `npm run test` reported 8 test files and 22 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -108,4 +116,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-007-room-shell`. Keep the next step focused on navigation and room shell. Do not start interactive panels until the room shell builds cleanly.
+Start with `feat-008-room-panels`. Keep the next step focused on interactive project room panels and tab navigation. Do not start E2E until panel tests and build pass.
