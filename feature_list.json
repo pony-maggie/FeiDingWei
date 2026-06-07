@@ -17,8 +17,8 @@
       "name": "Domain Types And Constants",
       "description": "Add schemas, task statuses, artifact statuses, agent run statuses, default agents, and agent mention extraction.",
       "dependencies": ["feat-001-project-bootstrap"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added failing domain tests first, then implemented domain schemas, default agents, and mention extraction. Verified with npm run test -- src/lib/__tests__/domain.test.ts (5 passed), npm run test (6 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-2-add-domain-types-and-constants"
     },
     {

@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-001-project-bootstrap
+**Active Feature:** feat-002-domain-model
 **Current Phase:** MVP implementation
 
 ## Status
@@ -17,17 +17,18 @@
 - [x] Revised the implementation plan to reuse `@earendil-works/pi-ai` and `@earendil-works/pi-agent-core`.
 - [x] Added project harness files for iteration management.
 - [x] Completed `feat-001-project-bootstrap`.
+- [x] Completed `feat-002-domain-model`.
 
 ### What's In Progress
 
-- [ ] Start `feat-002-domain-model`.
+- [ ] Start `feat-003-database-schema`.
 
 ### What's Next
 
-1. Start `feat-002-domain-model`.
-2. Add failing domain tests.
-3. Implement domain schemas, default agents, and mention extraction.
-4. Run `npm run test`, `npm run lint`, and `npm run build`.
+1. Start `feat-003-database-schema`.
+2. Add Prisma schema and seed data.
+3. Generate and migrate the database.
+4. Run `npm run prisma:seed`, `npm run test`, `npm run lint`, and `npm run build`.
 
 ## Blockers / Risks
 
@@ -62,11 +63,15 @@
 - `src/app/layout.tsx`: Added root layout and metadata.
 - `src/app/globals.css`: Added base Tailwind/global styles.
 - `src/app/__tests__/layout.test.tsx`: Added bootstrap metadata test.
+- `src/lib/__tests__/domain.test.ts`: Added domain behavior tests.
+- `src/lib/domain.ts`: Added domain schemas, default agents, and mention extraction.
 
 ## Evidence of Completion
 
 - [x] Harness files created.
 - [x] App tests pass: `npm run test` reported 1 test file and 1 test passed.
+- [x] Domain tests pass: `npm run test -- src/lib/__tests__/domain.test.ts` reported 5 tests passed.
+- [x] App tests pass after domain model: `npm run test` reported 2 test files and 6 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -74,4 +79,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-002-domain-model`. Keep the next step focused on domain schemas, default agents, and mention extraction. Do not start Prisma models until the domain tests pass.
+Start with `feat-003-database-schema`. Keep the next step focused on persistent schema and seed data. Do not start room service code until Prisma migrate and seed are verified.
