@@ -1,0 +1,106 @@
+{
+  "project": "FeiDingWei",
+  "description": "MVP feature tracker for the Agent Project Room v0. Status source of truth for one-feature-at-a-time implementation.",
+  "statusValues": ["not-started", "in-progress", "blocked", "pass"],
+  "features": [
+    {
+      "id": "feat-001-project-bootstrap",
+      "name": "Project Bootstrap",
+      "description": "Initialize the Next.js App Router project with TypeScript, Tailwind, Vitest, Playwright, Prisma, Pi dependencies, exact dependency saving, and base layout.",
+      "dependencies": [],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-1-initialize-the-application"
+    },
+    {
+      "id": "feat-002-domain-model",
+      "name": "Domain Types And Constants",
+      "description": "Add schemas, task statuses, artifact statuses, agent run statuses, default agents, and agent mention extraction.",
+      "dependencies": ["feat-001-project-bootstrap"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-2-add-domain-types-and-constants"
+    },
+    {
+      "id": "feat-003-database-schema",
+      "name": "Database Schema And Seed Data",
+      "description": "Add Prisma SQLite schema for users, workspaces, memberships, rooms, messages, tasks, documents, agents, and agent runs; add seed data.",
+      "dependencies": ["feat-002-domain-model"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-3-add-database-schema-and-seed-data"
+    },
+    {
+      "id": "feat-004-room-service",
+      "name": "Project Room Service",
+      "description": "Add room loading, sorted view model, draft counts, task approval, and document approval service functions.",
+      "dependencies": ["feat-003-database-schema"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-4-add-room-service"
+    },
+    {
+      "id": "feat-005-pi-agent-runtime",
+      "name": "Pi-Backed Agent Runtime",
+      "description": "Add FeiDingWei room artifact tools, Pi runtime adapter, faux provider defaults, and message-to-agent orchestration.",
+      "dependencies": ["feat-004-room-service"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-5-add-pi-backed-agent-runtime"
+    },
+    {
+      "id": "feat-006-api-routes",
+      "name": "Room And Approval API Routes",
+      "description": "Add message creation endpoint, task approval endpoint, and document approval endpoint.",
+      "dependencies": ["feat-005-pi-agent-runtime"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-6-add-api-routes"
+    },
+    {
+      "id": "feat-007-room-shell",
+      "name": "Project Room UI Shell",
+      "description": "Add root redirect, app shell, workspace sidebar, project room header, and initial room page.",
+      "dependencies": ["feat-006-api-routes"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-7-add-project-room-ui-shell"
+    },
+    {
+      "id": "feat-008-room-panels",
+      "name": "Room Tabs And Panels",
+      "description": "Add Chat, Tasks, Docs, Agents, and Activity panels with tab navigation and artifact approval controls.",
+      "dependencies": ["feat-007-room-shell"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-8-add-room-tabs-and-panels"
+    },
+    {
+      "id": "feat-009-e2e-workflow",
+      "name": "End-To-End Agent Project Room Workflow",
+      "description": "Add Playwright coverage for project room load, @PMAgent mention, draft task/doc creation, task approval, and agent activity.",
+      "dependencies": ["feat-008-room-panels"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-9-add-end-to-end-coverage"
+    },
+    {
+      "id": "feat-010-readme-runbook",
+      "name": "README And Runbook",
+      "description": "Add README with product positioning, MVP scope, Pi runtime explanation, setup steps, and test commands.",
+      "dependencies": ["feat-009-e2e-workflow"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-10-add-readme-and-runbook"
+    },
+    {
+      "id": "feat-011-final-verification",
+      "name": "Final MVP Verification",
+      "description": "Run seed, unit tests, build, E2E checks, local dev server smoke test, and update quality evidence.",
+      "dependencies": ["feat-010-readme-runbook"],
+      "status": "not-started",
+      "evidence": "",
+      "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-11-final-verification"
+    }
+  ]
+}
