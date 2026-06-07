@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-009-e2e-workflow
+**Active Feature:** feat-010-readme-runbook
 **Current Phase:** MVP implementation
 
 ## Status
@@ -25,16 +25,18 @@
 - [x] Completed `feat-007-room-shell`.
 - [x] Completed `feat-008-room-panels`.
 - [x] Completed `feat-009-e2e-workflow`.
+- [x] Completed `feat-010-readme-runbook`.
 
 ### What's In Progress
 
-- [ ] Start `feat-010-readme-runbook`.
+- [ ] Start `feat-011-final-verification`.
 
 ### What's Next
 
-1. Start `feat-010-readme-runbook`.
-2. Add README with product positioning, Pi runtime, setup, and verification commands.
-3. Run docs-adjacent verification and full automated checks.
+1. Start `feat-011-final-verification`.
+2. Run final seed, test, lint, build, audit, and E2E.
+3. Start dev server and verify browser smoke if needed.
+4. Update quality and handoff docs.
 
 ## Blockers / Risks
 
@@ -103,6 +105,8 @@
 - `vitest.config.ts`: Excluded Playwright tests from Vitest.
 - `src/app/page.tsx`: Marked root page dynamic for runtime DB redirect.
 - `src/app/rooms/[roomId]/page.tsx`: Marked room page dynamic for runtime DB loading.
+- `src/lib/__tests__/readme.test.ts`: Added README contract test.
+- `README.md`: Added product, runtime, setup, verification, and iteration runbook.
 
 ## Evidence of Completion
 
@@ -125,6 +129,8 @@
 - [x] App tests pass after room panels: `npm run test` reported 9 test files and 23 tests passed.
 - [x] E2E passes: `npm run test:e2e` reported 2 tests passed across desktop and mobile projects.
 - [x] App tests pass after E2E config: `npm run test` reported 9 test files and 23 tests passed.
+- [x] README contract test passes: `npm run test -- src/lib/__tests__/readme.test.ts` reported 1 test passed.
+- [x] App tests pass after README: `npm run test` reported 10 test files and 24 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -132,4 +138,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-010-readme-runbook`. Keep the next step focused on documentation and runbook accuracy.
+Start with `feat-011-final-verification`. Run the full final verification chain and update quality/handoff artifacts.
