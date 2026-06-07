@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-004-room-service
+**Active Feature:** feat-005-pi-agent-runtime
 **Current Phase:** MVP implementation
 
 ## Status
@@ -20,17 +20,17 @@
 - [x] Completed `feat-002-domain-model`.
 - [x] Completed `feat-003-database-schema`.
 - [x] Completed `feat-004-room-service`.
+- [x] Completed `feat-005-pi-agent-runtime`.
 
 ### What's In Progress
 
-- [ ] Start `feat-005-pi-agent-runtime`.
+- [ ] Start `feat-006-api-routes`.
 
 ### What's Next
 
-1. Start `feat-005-pi-agent-runtime`.
-2. Add failing Pi agent tool/runtime tests.
-3. Implement room artifact tools and Pi-backed agent orchestration.
-4. Run `npm run test`, `npm run lint`, and `npm run build`.
+1. Start `feat-006-api-routes`.
+2. Add route handlers for messages and artifact approvals.
+3. Verify TypeScript/build and API behavior through later UI/E2E tests.
 
 ## Blockers / Risks
 
@@ -73,6 +73,11 @@
 - `src/lib/__tests__/db.test.ts`: Added seeded database test.
 - `src/lib/__tests__/room-service.test.ts`: Added room service tests.
 - `src/lib/room-service.ts`: Added room loading and artifact approval service.
+- `src/lib/__tests__/agent-tools.test.ts`: Added room artifact tool tests.
+- `src/lib/__tests__/agent-service.test.ts`: Added Pi runtime and orchestration tests.
+- `src/lib/agent-tools.ts`: Added Pi tools for draft task/doc creation.
+- `src/lib/pi-runtime.ts`: Added Pi faux provider agent factory.
+- `src/lib/agent-service.ts`: Added message persistence and agent run orchestration.
 
 ## Evidence of Completion
 
@@ -85,6 +90,8 @@
 - [x] App tests pass after database schema: `npm run test` reported 3 test files and 7 tests passed.
 - [x] Room service tests pass: `npm run test -- src/lib/__tests__/room-service.test.ts` reported 4 tests passed.
 - [x] App tests pass after room service: `npm run test` reported 4 test files and 11 tests passed.
+- [x] Agent runtime tests pass: `npm run test -- src/lib/__tests__/agent-tools.test.ts src/lib/__tests__/agent-service.test.ts` reported 6 tests passed.
+- [x] App tests pass after agent runtime: `npm run test` reported 6 test files and 17 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -92,4 +99,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-005-pi-agent-runtime`. Keep the next step focused on Pi tools and agent orchestration. Do not start API routes until agent runtime tests pass.
+Start with `feat-006-api-routes`. Keep the next step focused on API endpoints. Do not start UI shell until API routes build cleanly.
