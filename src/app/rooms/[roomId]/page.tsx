@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-import { AppShell } from "@/components/app-shell";
-import { RoomTabs } from "@/components/room-tabs";
+import { ProjectRoom } from "@/components/project-room";
 import { getProjectRoom } from "@/lib/room-service";
 
 export const dynamic = "force-dynamic";
@@ -13,13 +12,5 @@ export default async function RoomPage({ params }: { params: Promise<{ roomId: s
     notFound();
   }
 
-  return (
-    <AppShell
-      workspaceName={room.workspace.name}
-      roomName={room.name}
-      roomDescription={room.description}
-    >
-      <RoomTabs room={room} />
-    </AppShell>
-  );
+  return <ProjectRoom room={room} />;
 }

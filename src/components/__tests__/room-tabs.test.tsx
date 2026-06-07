@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
+import { translations } from "@/lib/i18n";
 import { RoomTabs } from "../room-tabs";
 
 vi.mock("next/navigation", () => ({
@@ -55,9 +56,8 @@ const room = {
 
 describe("RoomTabs", () => {
   it("renders Chinese labels by default and switches work panels", async () => {
-    render(<RoomTabs room={room} />);
+    render(<RoomTabs room={room} labels={translations.zh} />);
     expect(screen.getByRole("heading", { name: "对话" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "English" })).toBeInTheDocument();
     expect(screen.getByText("Discussing the MVP")).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "任务" }));
@@ -75,13 +75,9 @@ describe("RoomTabs", () => {
     expect(screen.getByText("PM Agent completed the run.")).toBeInTheDocument();
   });
 
-  it("switches labels to English", async () => {
-    render(<RoomTabs room={room} />);
-
-    await userEvent.click(screen.getByRole("button", { name: "English" }));
-
+  it("renders English labels when provided", async () => {
+    render(<RoomTabs room={room} labels={translations.en} />);
     expect(screen.getByRole("heading", { name: "Chat" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "中文" })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: "Tasks" }));
     expect(screen.getByRole("heading", { name: "Tasks" })).toBeInTheDocument();

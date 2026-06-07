@@ -110,6 +110,15 @@
       "status": "pass",
       "evidence": "Added Chinese-first UI labels, English toggle, Chinese README.md, English README.en.md, and private Web deployment/no-key v0 guidance. Verified red tests before implementation for README and RoomTabs, then npm run test (11 files, 27 tests passed), npm run lint (next typegen + tsc passed), npm run build (Next 16.2.7 passed), npm audit --json (0 vulnerabilities), npm run test:e2e (2 Playwright tests passed across desktop and mobile), and local smoke at http://127.0.0.1:3100 with Chinese default heading and English toggle.",
       "planReference": "docs/superpowers/plans/2026-06-07-bilingual-ui-and-readme.md"
+    },
+    {
+      "id": "feat-013-language-consistency-settings",
+      "name": "Language Consistency And Settings Menu",
+      "description": "Fix mixed Chinese/English display by moving locale state to the whole project room, placing language switching inside Settings, and localizing known seed/demo content.",
+      "dependencies": ["feat-012-bilingual-ui-readme"],
+      "status": "pass",
+      "evidence": "Root cause confirmed with browser text dump: locale state only affected RoomTabs while AppShell and seed/demo content stayed in their original language. Added ProjectRoom regression test first, then implemented whole-room locale state, AppShell Settings menu, known seed/demo content localization, and updated E2E. Verified npm run prisma:seed && npm run test (12 files, 28 tests passed), npm run lint, npm run build, npm audit --json (0 vulnerabilities), npm run test:e2e (2 passed), and local smoke at http://127.0.0.1:3100 confirming default Chinese content and Settings -> English switching.",
+      "planReference": "docs/superpowers/plans/2026-06-07-bilingual-ui-and-readme.md"
     }
   ]
 }

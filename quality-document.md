@@ -2,7 +2,7 @@
 
 ## Current Milestone
 
-**Milestone:** Agent Project Room MVP with bilingual UI and readmes
+**Milestone:** Agent Project Room MVP with consistent bilingual UI and readmes
 **Date:** 2026-06-07
 **Overall Grade:** A
 
@@ -13,7 +13,7 @@
 | Product Focus | A | MVP stays focused on one runnable Agent Project Room instead of trying to replace a full office suite. |
 | Architecture | A | Product services, Prisma persistence, Pi-backed agent orchestration, API routes, and UI panels are separated cleanly. |
 | Iteration Management | A | `feature_list.json`, `progress.md`, `session-handoff.md`, and commits provide feature-by-feature traceability. |
-| Implementation Completeness | A | All 12 tracked MVP features are complete, including bilingual UI and README support. |
+| Implementation Completeness | A | All 13 tracked MVP features are complete, including bilingual UI, README support, and language consistency fix. |
 | Test Coverage | A | Coverage includes unit, service, API, component, package-script, README contract, and Playwright desktop/mobile workflow tests. |
 | Runtime Verification | A | Seed, test, lint, production build, audit, and E2E all pass in the current environment. |
 | Documentation | A | Chinese and English README files, product, architecture, reliability, plan, progress, and handoff docs are aligned with the shipped MVP. |
@@ -24,14 +24,14 @@
 ### Final Verification
 
 - `npm run prisma:seed` passed.
-- `npm run test` passed after bilingual changes: 11 test files, 27 tests.
+- `npm run test` passed after the language consistency fix: 12 test files, 28 tests.
 - `npm run lint` passed: `next typegen && tsc --noEmit`.
 - `npm run build` passed with Next.js 16.2.7 and dynamic runtime routes for room/API pages.
 - `npm audit --json` passed with 0 info, low, moderate, high, or critical vulnerabilities.
 - `npm run test:e2e` passed after bilingual changes: 2 Playwright tests across desktop and mobile projects.
-- Local dev smoke passed at `http://127.0.0.1:3100`: browser title was `FeiDingWei`, the default room loaded, and the `Agent Project Room` heading plus `Chat` tab were visible.
+- Local dev smoke passed at `http://127.0.0.1:3100`: browser title was `FeiDingWei`, the default room loaded, and the Chinese `智能体项目房间` heading plus Settings-menu English switch were visible.
 - Targeted bilingual tests passed: README contract tests cover Chinese `README.md`, English `README.en.md`, pure Web app positioning, private deployment, and no required v0 model API key; component tests cover Chinese default labels and English toggle.
-- Final bilingual smoke passed at `http://127.0.0.1:3100`: Chinese default `对话` heading was visible, `English` toggle worked, and English `Chat` heading was visible.
+- Final language consistency smoke passed at `http://127.0.0.1:3100`: default Chinese room content appeared, key English seed copy was absent, Settings -> English switched the whole page to English.
 
 ### Product Behavior
 
@@ -42,7 +42,8 @@
 - Agent tools create draft task and document artifacts.
 - Tasks and docs stay draft until human approval.
 - Agent activity records started/completed run state.
-- UI defaults to Chinese and can switch core room labels to English.
+- UI defaults to Chinese and can switch the whole project room to English through Settings.
+- Known seed/demo/faux content is localized with the selected UI language.
 - README documentation is split into Chinese and English files.
 - Deployment copy states that v0 is a pure Web app, private-deployment-first, and does not require a model API key by default.
 
@@ -52,8 +53,8 @@
 - Service-layer tests cover room loading, draft counts, and approval transitions.
 - Agent tests cover Pi tool wiring, runtime creation, message persistence, draft artifact creation, and run completion.
 - API tests cover message creation validation and task/document approval endpoints.
-- Component tests cover shell rendering, room tab navigation, Chinese default labels, and English switching.
-- E2E tests cover the complete room workflow on desktop and mobile, including Chinese default labels and English toggle visibility.
+- Component tests cover shell rendering, room tab navigation, whole-room Chinese defaults, Settings-menu language switching, and localized seed/demo content.
+- E2E tests cover the complete room workflow on desktop and mobile, including Chinese default labels, Settings-menu language switching, and localized generated artifacts.
 - `npm run lint` now runs `next typegen` before `tsc`, so Next 16 route types are generated before TypeScript verification.
 
 ## Open Risks

@@ -3,7 +3,7 @@
 ## Current Objective
 
 - Goal: Build FeiDingWei MVP, an open source agent-native project room.
-- Current status: MVP implementation complete; bilingual UI and README update verified.
+- Current status: MVP implementation complete; language consistency bugfix verified.
 - Branch: `feature/mvp-implementation`.
 
 ## Completed This Session
@@ -24,18 +24,21 @@
 - [x] Added Chinese-first UI labels and English toggle.
 - [x] Split README into Chinese `README.md` and English `README.en.md`.
 - [x] Documented that v0 is a pure Web app, private-deployment-first, and does not require a model API key by default.
+- [x] Fixed mixed Chinese/English display by moving language state to the whole project room.
+- [x] Moved language switching into the Settings menu.
+- [x] Localized known seed/demo/faux content for the selected language.
 
 ## Verification Evidence
 
 | Check | Command | Result | Notes |
 |---|---|---|---|
 | Seed data | `npm run prisma:seed` | Pass | Deterministic MVP data recreated. |
-| Test suite | `npm run test` | Pass | 11 test files, 27 tests after bilingual changes. |
+| Test suite | `npm run test` | Pass | 12 test files, 28 tests after language consistency fix. |
 | TypeScript | `npm run lint` | Pass | Runs `next typegen && tsc --noEmit`. |
 | Production build | `npm run build` | Pass | Next.js 16.2.7 build completed. |
 | Dependency audit | `npm audit --json` | Pass | 0 total vulnerabilities. |
-| Browser E2E | `npm run test:e2e` | Pass | 2 Playwright tests across desktop and mobile; covers Chinese default labels and English toggle. |
-| Local smoke | Playwright opened `http://127.0.0.1:3100` | Pass | Title `FeiDingWei`; default Chinese `对话` heading visible; English toggle shows `Chat`. |
+| Browser E2E | `npm run test:e2e` | Pass | 2 Playwright tests across desktop and mobile; covers Settings-menu switching and localized generated artifacts. |
+| Local smoke | Playwright opened `http://127.0.0.1:3100` | Pass | Default Chinese content visible; key English seed copy absent; Settings -> English switches whole page. |
 
 ## Files Changed
 
@@ -76,7 +79,9 @@
 - v0 is currently a pure Web application.
 - Companies should treat v0 as private-deployment-first.
 - v0 does not require a model API key by default because it uses deterministic Pi faux provider runs.
-- UI defaults to Chinese and offers an English toggle inside the project room.
+- UI defaults to Chinese and offers language switching inside the Settings menu.
+- `ProjectRoom` owns locale state for the whole page.
+- Known seed/demo/faux content is localized; arbitrary user-authored text is not translated automatically.
 - `README.md` is Chinese; `README.en.md` is English.
 - Reuse Pi for agent runtime, tool calling, and provider infrastructure.
 - Use Pi faux provider defaults for deterministic local tests and demos.

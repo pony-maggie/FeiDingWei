@@ -51,7 +51,7 @@ The first version implements an Agent Project Room:
 - Default agents.
 - Agent run history.
 - Human approval for generated artifacts.
-- Chinese and English UI switching.
+- Chinese and English UI switching in the Settings menu.
 
 The core flow is:
 

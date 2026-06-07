@@ -16,7 +16,10 @@ export const translations = {
     shell: {
       workspace: "工作区",
       newRoom: "新建项目房间",
-      visibleAgents: "智能体是可见的协作者。"
+      visibleAgents: "智能体是可见的协作者。",
+      settings: "设置",
+      language: "语言",
+      currentLanguage: "中文"
     },
     chat: {
       heading: "对话",
@@ -72,7 +75,10 @@ export const translations = {
     shell: {
       workspace: "Workspace",
       newRoom: "New room",
-      visibleAgents: "Agents are visible collaborators."
+      visibleAgents: "Agents are visible collaborators.",
+      settings: "Settings",
+      language: "Language",
+      currentLanguage: "English"
     },
     chat: {
       heading: "Chat",
