@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-008-room-panels
+**Active Feature:** feat-009-e2e-workflow
 **Current Phase:** MVP implementation
 
 ## Status
@@ -24,16 +24,17 @@
 - [x] Completed `feat-006-api-routes`.
 - [x] Completed `feat-007-room-shell`.
 - [x] Completed `feat-008-room-panels`.
+- [x] Completed `feat-009-e2e-workflow`.
 
 ### What's In Progress
 
-- [ ] Start `feat-009-e2e-workflow`.
+- [ ] Start `feat-010-readme-runbook`.
 
 ### What's Next
 
-1. Start `feat-009-e2e-workflow`.
-2. Add Playwright E2E test for chat-to-agent-to-draft-artifacts-to-approval.
-3. Run `npm run test:e2e`.
+1. Start `feat-010-readme-runbook`.
+2. Add README with product positioning, Pi runtime, setup, and verification commands.
+3. Run docs-adjacent verification and full automated checks.
 
 ## Blockers / Risks
 
@@ -97,6 +98,11 @@
 - `src/components/docs-panel.tsx`: Added doc list and approval action.
 - `src/components/agents-panel.tsx`: Added agents and activity view.
 - `src/components/room-tabs.tsx`: Added project room tab composition.
+- `tests/e2e/project-room.spec.ts`: Added browser E2E for the MVP workflow.
+- `playwright.config.ts`: Set dedicated E2E port 3100 and serial workers for SQLite seed safety.
+- `vitest.config.ts`: Excluded Playwright tests from Vitest.
+- `src/app/page.tsx`: Marked root page dynamic for runtime DB redirect.
+- `src/app/rooms/[roomId]/page.tsx`: Marked room page dynamic for runtime DB loading.
 
 ## Evidence of Completion
 
@@ -117,6 +123,8 @@
 - [x] App tests pass after room shell: `npm run test` reported 8 test files and 22 tests passed.
 - [x] RoomTabs test passes: `npm run test -- src/components/__tests__/room-tabs.test.tsx` reported 1 test passed.
 - [x] App tests pass after room panels: `npm run test` reported 9 test files and 23 tests passed.
+- [x] E2E passes: `npm run test:e2e` reported 2 tests passed across desktop and mobile projects.
+- [x] App tests pass after E2E config: `npm run test` reported 9 test files and 23 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -124,4 +132,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-009-e2e-workflow`. Keep the next step focused on browser-level verification of the MVP loop.
+Start with `feat-010-readme-runbook`. Keep the next step focused on documentation and runbook accuracy.

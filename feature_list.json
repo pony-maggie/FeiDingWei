@@ -80,8 +80,8 @@
       "name": "End-To-End Agent Project Room Workflow",
       "description": "Add Playwright coverage for project room load, @PMAgent mention, draft task/doc creation, task approval, and agent activity.",
       "dependencies": ["feat-008-room-panels"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added Playwright E2E test for project room chat -> PM Agent -> draft tasks/docs -> approval -> activity on desktop and mobile. Fixed E2E dedicated port 3100, serial workers for SQLite seed, strict locators, dynamic room pages, and Vitest E2E exclusion. Verified npm run test:e2e (2 passed), npm run test (23 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-9-add-end-to-end-coverage"
     },
     {

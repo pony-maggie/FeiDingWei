@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 import { getDefaultRoomId } from "@/lib/room-service";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const roomId = await getDefaultRoomId();
 
