@@ -3,7 +3,7 @@
 ## Current State
 
 **Last Updated:** 2026-06-07 13:28 HKT
-**Active Feature:** feat-002-domain-model
+**Active Feature:** feat-003-database-schema
 **Current Phase:** MVP implementation
 
 ## Status
@@ -18,17 +18,18 @@
 - [x] Added project harness files for iteration management.
 - [x] Completed `feat-001-project-bootstrap`.
 - [x] Completed `feat-002-domain-model`.
+- [x] Completed `feat-003-database-schema`.
 
 ### What's In Progress
 
-- [ ] Start `feat-003-database-schema`.
+- [ ] Start `feat-004-room-service`.
 
 ### What's Next
 
-1. Start `feat-003-database-schema`.
-2. Add Prisma schema and seed data.
-3. Generate and migrate the database.
-4. Run `npm run prisma:seed`, `npm run test`, `npm run lint`, and `npm run build`.
+1. Start `feat-004-room-service`.
+2. Add failing room service tests.
+3. Implement room loading, sorted messages, draft counts, and approval functions.
+4. Run `npm run test`, `npm run lint`, and `npm run build`.
 
 ## Blockers / Risks
 
@@ -65,6 +66,10 @@
 - `src/app/__tests__/layout.test.tsx`: Added bootstrap metadata test.
 - `src/lib/__tests__/domain.test.ts`: Added domain behavior tests.
 - `src/lib/domain.ts`: Added domain schemas, default agents, and mention extraction.
+- `prisma/schema.prisma`: Added workspace, room, message, task, document, agent, and agent run models.
+- `prisma/seed.ts`: Added deterministic MVP seed data.
+- `src/lib/db.ts`: Added Prisma singleton.
+- `src/lib/__tests__/db.test.ts`: Added seeded database test.
 
 ## Evidence of Completion
 
@@ -72,6 +77,9 @@
 - [x] App tests pass: `npm run test` reported 1 test file and 1 test passed.
 - [x] Domain tests pass: `npm run test -- src/lib/__tests__/domain.test.ts` reported 5 tests passed.
 - [x] App tests pass after domain model: `npm run test` reported 2 test files and 6 tests passed.
+- [x] Prisma migration and seed pass: `npm run prisma:generate && npm run prisma:migrate -- --name init && npm run prisma:seed`.
+- [x] Database test passes: `npm run test -- src/lib/__tests__/db.test.ts` reported 1 test passed.
+- [x] App tests pass after database schema: `npm run test` reported 3 test files and 7 tests passed.
 - [x] TypeScript check passes: `npm run lint` completed with exit code 0.
 - [x] App build passes: `npm run build` completed with exit code 0.
 - [x] Dependency audit clean: `npm audit --json` reported 0 vulnerabilities.
@@ -79,4 +87,4 @@
 
 ## Notes For Next Session
 
-Start with `feat-003-database-schema`. Keep the next step focused on persistent schema and seed data. Do not start room service code until Prisma migrate and seed are verified.
+Start with `feat-004-room-service`. Keep the next step focused on room loading and artifact approval. Do not start agent runtime code until room service tests pass.

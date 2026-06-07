@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(cuid())
+  name        String
+  email       String       @unique
+  memberships Membership[]
+  messages    Message[]
+  tasks       Task[]       @relation("TaskAssignee")
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model Workspace {
+  id          String        @id @default(cuid())
+  name        String
+  memberships Membership[]
+  rooms       ProjectRoom[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Membership {
+  id          String    @id @default(cuid())
+  role        String
+  userId      String
+  workspaceId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, workspaceId])
+}
+
+model ProjectRoom {
+  id          String      @id @default(cuid())
+  name        String
+  description String
+  workspaceId String
+  workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  messages    Message[]
+  tasks       Task[]
+  documents   Document[]
+  agents      Agent[]
+  agentRuns   AgentRun[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Message {
+  id        String      @id @default(cuid())
+  body      String
+  authorId  String?
+  agentId   String?
+  roomId    String
+  author    User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  agent     Agent?      @relation(fields: [agentId], references: [id], onDelete: SetNull)
+  room      ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+}
+
+model Task {
+  id              String      @id @default(cuid())
+  title           String
+  description     String
+  status          String
+  priority        String
+  artifactStatus  String
+  assigneeId      String?
+  sourceMessageId String?
+  sourceRunId     String?
+  roomId          String
+  assignee        User?       @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Document {
+  id              String      @id @default(cuid())
+  title           String
+  body            String
+  artifactStatus  String
+  sourceMessageId String?
+  sourceRunId     String?
+  roomId          String
+  room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model Agent {
+  id           String      @id @default(cuid())
+  slug         String
+  name         String
+  role         String
+  description  String
+  capabilities String
+  roomId       String
+  room         ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  messages     Message[]
+  runs         AgentRun[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  @@unique([slug, roomId])
+}
+
+model AgentRun {
+  id              String      @id @default(cuid())
+  status          String
+  input           String
+  output          String
+  error           String?
+  agentId         String
+  roomId          String
+  sourceMessageId String?
+  agent           Agent       @relation(fields: [agentId], references: [id], onDelete: Cascade)
+  room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}

@@ -26,8 +26,8 @@
       "name": "Database Schema And Seed Data",
       "description": "Add Prisma SQLite schema for users, workspaces, memberships, rooms, messages, tasks, documents, agents, and agent runs; add seed data.",
       "dependencies": ["feat-002-domain-model"],
-      "status": "not-started",
-      "evidence": "",
+      "status": "pass",
+      "evidence": "Added failing seeded database test first, then Prisma schema, migration, db singleton, .env.example, and seed data. Verified prisma generate/migrate/seed, npm run test -- src/lib/__tests__/db.test.ts (1 passed), npm run test (7 passed), npm run lint, npm run build.",
       "planReference": "docs/superpowers/plans/2026-06-07-feidingwei-mvp-implementation.md#task-3-add-database-schema-and-seed-data"
     },
     {
