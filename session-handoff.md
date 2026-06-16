@@ -3,7 +3,7 @@
 ## Current Objective
 
 - Goal: Build FeiDingWei V2, a multi-user Agent-native project collaboration room.
-- Current status: V1 accepted by human review; V2 collaboration design and implementation plan are complete; `feat-021-auth-session` through `feat-031-room-creation-membership` are complete.
+- Current status: V1 accepted by human review; V2 collaboration design and implementation plan are complete; `feat-021-auth-session` through `feat-032-user-manual` are complete.
 - Branch: `feature/mvp-implementation`.
 
 ## Completed This Session
@@ -98,6 +98,9 @@
 - [x] Added usable sidebar project-room creation with room name, description, existing workspace member selection, role selection, and redirect to the created room.
 - [x] Added accessible room lists so invited members see created rooms and uninvited non-admin members do not.
 - [x] Created default visible Agents for each new room, kept creator membership as `room_lead`, filtered the current user out of the inviteable member list, and rejected service-layer room creation when the creator is not a workspace member.
+- [x] Implemented `feat-032-user-manual`.
+- [x] Added `docs/USER_MANUAL.md` with user-facing workflows for login, room chat, human mentions, `@Agent` generation, task/document review, Decisions, Agents traceability, Inbox, People, room creation, and export.
+- [x] Captured 12 PNG screenshots in `docs/user-manual-assets/` for the manual.
 
 ## Verification Evidence
 
@@ -118,6 +121,9 @@
 | Browser E2E | `PLAYWRIGHT_PORT=3101 npm run test:e2e` | Pass | Re-run after local room data export; covers Settings export entry visibility. |
 | Browser E2E | `PLAYWRIGHT_PORT=3101 npm run test:e2e` | Pass | Re-run after generation preview; covers preview-before-run and confirm generation. |
 | Browser E2E | `PLAYWRIGHT_PORT=3101 npm run test:e2e` | Pass | Re-run after multi-user mentions; covers `@product` human message without Agent preview and existing `@PMAgent` generation. |
+| User manual screenshot links | `node - <<'NODE' ...` | Pass | `feature_list.json` parsed; 12 Markdown screenshot references checked; 12 unique assets found. |
+| Diff whitespace | `git diff --check` | Pass | No whitespace errors. |
+| Standard harness | `./init.sh` | Pass | npm install/audit, Prisma generate, lint, 26 test files / 122 tests, and build. |
 | Test suite | `npm run test` | Pass | 21 test files, 78 tests after multi-user mentions. |
 | TypeScript | `npm run lint` | Pass | Re-run after multi-user mentions. |
 | Production build | `npm run build` | Pass | Re-run after multi-user mentions. |
@@ -258,4 +264,4 @@
 
 ## Recommended Next Step
 
-- Manually accept `feat-031-room-creation-membership`; after acceptance, choose the next tracked feature without expanding into external invitations, enterprise org management, SSO, OA, CRM, or full IM.
+- Review `docs/USER_MANUAL.md`; after acceptance, choose the next tracked feature without expanding into external invitations, enterprise org management, SSO, OA, CRM, or full IM.

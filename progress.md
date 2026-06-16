@@ -4,7 +4,7 @@
 
 **Last Updated:** 2026-06-16 HKT
 **Active Feature:** none
-**Current Phase:** README bilingual runtime positioning refresh complete
+**Current Phase:** User manual with screenshots complete
 
 ## Status
 
@@ -126,6 +126,10 @@
 - [x] Added accessible room links to the sidebar and made root redirect choose the first room accessible to the current user.
 - [x] Added the create-time room form with name, description, workspace-member selection, current-user filtering, role selection, error handling, and redirect to the created room.
 - [x] Final `feat-031` verification passed: targeted service/API/component tests (3 files, 41 tests), room creation E2E single scenario (1 passed, 1 mobile skip), `npm run prisma:seed && npm run test` (26 files, 122 tests), `npm run lint`, `npm run build`, `PLAYWRIGHT_PORT=3101 npm run test:e2e` (6 passed, 2 skipped), `git diff --check`, and `./init.sh`.
+- [x] Implemented `feat-032-user-manual`.
+- [x] Added `docs/USER_MANUAL.md` as a Chinese usage manual covering login, project rooms, room chat, human mentions, `@Agent` generation plan confirmation, task/document assignment and review, Decisions, Agents traceability, Inbox, People, room creation, and room data export.
+- [x] Captured 12 workflow screenshots under `docs/user-manual-assets/`.
+- [x] Final `feat-032` verification passed: `feature_list.json` parsed successfully, all 12 Markdown screenshot references resolved, all PNG screenshots reported valid dimensions, `git diff --check` passed, and `./init.sh` passed with lint, 26 test files / 122 tests, and build.
 
 ### What's In Progress
 
@@ -133,8 +137,8 @@
 
 ### What's Next
 
-1. Manually accept `feat-031-room-creation-membership` in the browser: create a room, invite Product/QA, verify Product can enter and Engineer cannot see or enter it.
-2. Choose the next feature only after the room creation flow is accepted.
+1. Review `docs/USER_MANUAL.md` and confirm the manual covers the expected user-facing workflows.
+2. Choose the next feature only after the user manual is accepted.
 3. Keep broader enterprise org management, external invitations, SSO, OA, CRM, and full IM outside the current MVP boundary.
 
 ## Blockers / Risks

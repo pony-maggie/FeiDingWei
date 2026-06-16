@@ -281,6 +281,15 @@
       "status": "pass",
       "evidence": "Added failing room-service, API route, ProjectRoom/AppShell component, and Playwright E2E coverage first, then implemented accessible room listing, createProjectRoomWithMembers transaction, creator workspace-membership guard, authenticated POST /api/rooms, sidebar accessible room links, create-time member/role selection, creator room_lead enforcement, current-user filtering from inviteable members, default Agents for created rooms, root redirect to first accessible room, and documentation. Verified targeted service/API/component tests (3 files, 41 tests), room creation E2E (1 passed, 1 mobile skip), npm run prisma:seed && npm run test (26 files, 122 tests), npm run lint, npm run build, PLAYWRIGHT_PORT=3101 npm run test:e2e (6 passed, 2 skipped), git diff --check, and ./init.sh.",
       "planReference": "docs/superpowers/plans/2026-06-15-room-creation-membership.md"
+    },
+    {
+      "id": "feat-032-user-manual",
+      "name": "User Manual With Screenshots",
+      "description": "Add a docs user manual covering login, rooms, chat, Agent generation, task/document review, Inbox, People, Decisions, Agents traceability, export, and room creation with screenshots.",
+      "dependencies": ["feat-031-room-creation-membership"],
+      "status": "pass",
+      "evidence": "Added docs/USER_MANUAL.md with Chinese usage steps for login, project rooms, chat, @Agent generation plan confirmation, task/document assignment and review, Decisions, Agents traceability, Inbox, People, room creation, and room data export. Captured 12 PNG screenshots in docs/user-manual-assets. Verified feature_list.json parses, all 12 Markdown screenshot references resolve, git diff --check passes, PNG dimensions are valid, and ./init.sh passes with lint, 26 test files / 122 tests, and build.",
+      "planReference": "docs/USER_MANUAL.md"
     }
   ]
 }
