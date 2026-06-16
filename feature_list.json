@@ -288,7 +288,7 @@
       "description": "Add a docs user manual covering login, rooms, chat, Agent generation, task/document review, Inbox, People, Decisions, Agents traceability, export, and room creation with screenshots.",
       "dependencies": ["feat-031-room-creation-membership"],
       "status": "pass",
-      "evidence": "Added docs/USER_MANUAL.md with Chinese usage steps for login, project rooms, chat, @Agent generation plan confirmation, task/document assignment and review, Decisions, Agents traceability, Inbox, People, room creation, and room data export. Captured 12 PNG screenshots in docs/user-manual-assets. Verified feature_list.json parses, all 12 Markdown screenshot references resolve, git diff --check passes, PNG dimensions are valid, and ./init.sh passes with lint, 26 test files / 122 tests, and build.",
+      "evidence": "Added docs/USER_MANUAL.md with Chinese usage steps for login, project rooms, chat, @Agent generation plan confirmation, task/document assignment and review, Decisions, Agents traceability, Inbox, People, room creation, and room data export. Captured 12 PNG screenshots in docs/user-manual-assets and linked the manual from README.md and README.en.md. Verified feature_list.json parses, all 12 Markdown screenshot references resolve, git diff --check passes, PNG dimensions are valid, README contract tests pass, and ./init.sh passes with lint, 26 test files / 122 tests, and build.",
       "planReference": "docs/USER_MANUAL.md"
     }
   ]

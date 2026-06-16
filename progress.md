@@ -129,6 +129,7 @@
 - [x] Implemented `feat-032-user-manual`.
 - [x] Added `docs/USER_MANUAL.md` as a Chinese usage manual covering login, project rooms, room chat, human mentions, `@Agent` generation plan confirmation, task/document assignment and review, Decisions, Agents traceability, Inbox, People, room creation, and room data export.
 - [x] Captured 12 workflow screenshots under `docs/user-manual-assets/`.
+- [x] Linked the user manual from both `README.md` and `README.en.md`.
 - [x] Final `feat-032` verification passed: `feature_list.json` parsed successfully, all 12 Markdown screenshot references resolved, all PNG screenshots reported valid dimensions, `git diff --check` passed, and `./init.sh` passed with lint, 26 test files / 122 tests, and build.
 
 ### What's In Progress

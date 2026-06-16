@@ -10,6 +10,8 @@
 
 English version: [README.en.md](README.en.md)
 
+用户使用手册： [docs/USER_MANUAL.md](docs/USER_MANUAL.md)
+
 
 ## 部署方式
 

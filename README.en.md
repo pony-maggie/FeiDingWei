@@ -10,6 +10,8 @@ The current version lands that direction in one runnable Agent Project Room: hum
 
 中文版本: [README.md](README.md)
 
+User manual (Chinese, with screenshots): [docs/USER_MANUAL.md](docs/USER_MANUAL.md)
+
 ## Deployment
 
 Private deployment first:

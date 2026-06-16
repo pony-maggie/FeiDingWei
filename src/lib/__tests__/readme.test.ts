@@ -6,6 +6,7 @@ describe("README runbook", () => {
     const readme = readFileSync("README.md", "utf8");
 
     expect(readme).toContain("开源的 Agent 原生团队协作空间");
+    expect(readme).toContain("[docs/USER_MANUAL.md](docs/USER_MANUAL.md)");
     expect(readme).toContain("正面对标飞书、钉钉、企业微信这三个不开源的巨头");
     expect(readme).toContain("人不是默认最重要的界面中心");
     expect(readme).toContain("私有化部署优先");
@@ -24,6 +25,7 @@ describe("README runbook", () => {
     const readme = readFileSync("README.en.md", "utf8");
 
     expect(readme).toContain("Open source agent-native workspace for teams");
+    expect(readme).toContain("[docs/USER_MANUAL.md](docs/USER_MANUAL.md)");
     expect(readme).toContain("benchmark against Feishu, DingTalk, and WeCom");
     expect(readme).toContain("humans are not the default center of the interface");
     expect(readme).toContain("Private deployment first");
