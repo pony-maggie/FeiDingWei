@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   agentRunStatusSchema,
+  artifactStatusSchema,
   defaultAgents,
   extractAgentSlug,
   messageInputSchema,
@@ -34,6 +35,10 @@ describe("domain schemas", () => {
       "completed",
       "failed"
     ]);
+  });
+
+  it("accepts generated artifact lifecycle states", () => {
+    expect(artifactStatusSchema.options).toEqual(["draft", "active", "rejected"]);
   });
 
   it("extracts supported agent mentions from chat messages", () => {

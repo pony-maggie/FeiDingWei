@@ -3,43 +3,97 @@ import type { Locale } from "./i18n";
 type NamedEntity = { name: string };
 type NullableNamedEntity = NamedEntity | null;
 
+type LocalizableMessage = {
+  id: string;
+  body: string;
+  author: NullableNamedEntity;
+  agent: NullableNamedEntity;
+};
+
+type LocalizableRunSummary = {
+  id: string;
+  status: string;
+  output: string;
+  input: string;
+  agent: NamedEntity & { slug: string };
+};
+
+type TraceMetadata = {
+  sourceMessage: LocalizableMessage | null;
+  sourceRun: LocalizableRunSummary | null;
+} | null;
+
+type LocalizableTask = {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: string;
+  artifactStatus: string;
+  reviewStatus?: string;
+  blockedReason?: string | null;
+  assignee?: (NamedEntity & { id: string; email: string }) | null;
+  reviewer?: (NamedEntity & { id: string; email: string }) | null;
+  comments?: Array<{
+    id: string;
+    body: string;
+    createdAt: Date;
+    author: NullableNamedEntity;
+  }>;
+  trace?: TraceMetadata;
+};
+
+type LocalizableDocument = {
+  id: string;
+  title: string;
+  body: string;
+  artifactStatus: string;
+  reviewStatus?: string;
+  blockedReason?: string | null;
+  owner?: (NamedEntity & { id: string; email: string }) | null;
+  reviewer?: (NamedEntity & { id: string; email: string }) | null;
+  comments?: Array<{
+    id: string;
+    body: string;
+    createdAt: Date;
+    author: NullableNamedEntity;
+  }>;
+  trace?: TraceMetadata;
+};
+
+type LocalizableDecision = {
+  id: string;
+  title: string;
+  body: string;
+  status: string;
+  creator?: NamedEntity | null;
+  trace?: TraceMetadata;
+};
+
 export type LocalizableRoom = {
   id: string;
   workspace: NamedEntity;
   name: string;
   description: string;
-  messages: Array<{
-    id: string;
-    body: string;
-    author: NullableNamedEntity;
-    agent: NullableNamedEntity;
-  }>;
-  tasks: Array<{
-    id: string;
-    title: string;
-    description: string;
-    status: string;
-    priority: string;
-    artifactStatus: string;
-  }>;
-  documents: Array<{
-    id: string;
-    title: string;
-    body: string;
-    artifactStatus: string;
-  }>;
+  messages: LocalizableMessage[];
+  members: Array<NamedEntity & { id: string; email: string }>;
+  tasks: LocalizableTask[];
+  documents: LocalizableDocument[];
+  decisions?: LocalizableDecision[];
   agents: Array<{
     id: string;
+    slug: string;
     name: string;
     description: string;
   }>;
-  agentRuns: Array<{
-    id: string;
-    status: string;
-    output: string;
-    input: string;
-    agent: NamedEntity;
-  }>;
+  agentRuns: Array<
+    LocalizableRunSummary & {
+      sourceMessage?: LocalizableMessage | null;
+      generatedTasks?: LocalizableTask[];
+      generatedDocuments?: LocalizableDocument[];
+      generatedDecisions?: LocalizableDecision[];
+    }
+  >;
 };
 
 const knownText: Record<string, Record<Locale, string>> = {
@@ -58,6 +112,22 @@ const knownText: Record<string, Record<Locale, string>> = {
   Founder: {
     zh: "创始人",
     en: "Founder"
+  },
+  Business: {
+    zh: "业务",
+    en: "Business"
+  },
+  Product: {
+    zh: "产品",
+    en: "Product"
+  },
+  Engineer: {
+    zh: "研发",
+    en: "Engineer"
+  },
+  QA: {
+    zh: "测试",
+    en: "QA"
   },
   "We need the first version to prove that chat can become tasks and docs.": {
     zh: "第一版需要证明对话可以转成任务和文档。",
@@ -168,38 +238,107 @@ function localizeName<T extends NullableNamedEntity>(entity: T, locale: Locale):
   return { ...entity, name: localizeText(entity.name, locale) };
 }
 
+function localizeMessage(message: LocalizableMessage, locale: Locale): LocalizableMessage {
+  return {
+    ...message,
+    body: localizeText(message.body, locale),
+    author: localizeName(message.author, locale),
+    agent: localizeName(message.agent, locale)
+  };
+}
+
+function localizeRunSummary(run: LocalizableRunSummary, locale: Locale): LocalizableRunSummary {
+  return {
+    ...run,
+    output: localizeText(run.output, locale),
+    input: localizeText(run.input, locale),
+    agent: localizeName(run.agent, locale)
+  };
+}
+
+function localizeTrace(trace: TraceMetadata | undefined, locale: Locale): TraceMetadata {
+  if (!trace) {
+    return null;
+  }
+
+  return {
+    sourceMessage: trace.sourceMessage ? localizeMessage(trace.sourceMessage, locale) : null,
+    sourceRun: trace.sourceRun ? localizeRunSummary(trace.sourceRun, locale) : null
+  };
+}
+
+function localizeTask(task: LocalizableTask, locale: Locale): LocalizableTask {
+  return {
+    ...task,
+    title: localizeText(task.title, locale),
+    description: localizeText(task.description, locale),
+    blockedReason: task.blockedReason ? localizeText(task.blockedReason, locale) : task.blockedReason,
+    assignee: localizeName(task.assignee ?? null, locale),
+    reviewer: localizeName(task.reviewer ?? null, locale),
+    comments:
+      task.comments?.map((comment) => ({
+        ...comment,
+        body: localizeText(comment.body, locale),
+        author: localizeName(comment.author, locale)
+      })) ?? [],
+    trace: localizeTrace(task.trace, locale)
+  };
+}
+
+function localizeDocument(document: LocalizableDocument, locale: Locale): LocalizableDocument {
+  return {
+    ...document,
+    title: localizeText(document.title, locale),
+    body: localizeText(document.body, locale),
+    blockedReason: document.blockedReason
+      ? localizeText(document.blockedReason, locale)
+      : document.blockedReason,
+    owner: localizeName(document.owner ?? null, locale),
+    reviewer: localizeName(document.reviewer ?? null, locale),
+    comments:
+      document.comments?.map((comment) => ({
+        ...comment,
+        body: localizeText(comment.body, locale),
+        author: localizeName(comment.author, locale)
+      })) ?? [],
+    trace: localizeTrace(document.trace, locale)
+  };
+}
+
+function localizeDecision(decision: LocalizableDecision, locale: Locale): LocalizableDecision {
+  return {
+    ...decision,
+    title: localizeText(decision.title, locale),
+    body: localizeText(decision.body, locale),
+    creator: localizeName(decision.creator ?? null, locale),
+    trace: localizeTrace(decision.trace, locale)
+  };
+}
+
 export function localizeRoom<T extends LocalizableRoom>(room: T, locale: Locale): T {
   return {
     ...room,
     workspace: localizeName(room.workspace, locale),
     name: localizeText(room.name, locale),
     description: localizeText(room.description, locale),
-    messages: room.messages.map((message) => ({
-      ...message,
-      body: localizeText(message.body, locale),
-      author: localizeName(message.author, locale),
-      agent: localizeName(message.agent, locale)
-    })),
-    tasks: room.tasks.map((task) => ({
-      ...task,
-      title: localizeText(task.title, locale),
-      description: localizeText(task.description, locale)
-    })),
-    documents: room.documents.map((document) => ({
-      ...document,
-      title: localizeText(document.title, locale),
-      body: localizeText(document.body, locale)
-    })),
+    messages: room.messages.map((message) => localizeMessage(message, locale)),
+    members: room.members.map((member) => localizeName(member, locale)),
+    tasks: room.tasks.map((task) => localizeTask(task, locale)),
+    documents: room.documents.map((document) => localizeDocument(document, locale)),
+    decisions: room.decisions?.map((decision) => localizeDecision(decision, locale)) ?? [],
     agents: room.agents.map((agent) => ({
       ...agent,
       name: localizeText(agent.name, locale),
       description: localizeText(agent.description, locale)
     })),
     agentRuns: room.agentRuns.map((run) => ({
-      ...run,
-      output: localizeText(run.output, locale),
-      input: localizeText(run.input, locale),
-      agent: localizeName(run.agent, locale)
+      ...localizeRunSummary(run, locale),
+      sourceMessage: run.sourceMessage ? localizeMessage(run.sourceMessage, locale) : null,
+      generatedTasks: run.generatedTasks?.map((task) => localizeTask(task, locale)) ?? [],
+      generatedDocuments:
+        run.generatedDocuments?.map((document) => localizeDocument(document, locale)) ?? [],
+      generatedDecisions:
+        run.generatedDecisions?.map((decision) => localizeDecision(decision, locale)) ?? []
     }))
   };
 }

@@ -3,9 +3,11 @@ import type { AgentTool } from "@earendil-works/pi-agent-core";
 import {
   fauxAssistantMessage,
   fauxToolCall,
+  getModel,
   registerFauxProvider
 } from "@earendil-works/pi-ai";
 import type { AssistantMessage } from "@earendil-works/pi-ai";
+import { type LlmRuntimeConfig, resolveLlmRuntimeConfig } from "./llm-config";
 
 export function createDefaultFauxResponses(agentSlug: string): AssistantMessage[] {
   if (agentSlug === "pm-agent") {
@@ -90,24 +92,45 @@ export function createRoomAgent(input: {
   agentName: string;
   roomName: string;
   tools: AgentTool[];
+  llmConfig?: LlmRuntimeConfig;
+  collaborationContext?: string;
 }) {
-  const faux = registerFauxProvider({
-    provider: "feidingwei-faux",
-    tokenSize: { min: 12, max: 24 }
-  });
-  faux.setResponses(createDefaultFauxResponses(input.agentSlug));
+  const llmConfig = input.llmConfig ?? resolveLlmRuntimeConfig();
+  const model =
+    llmConfig.mode === "openai"
+      ? getModel(llmConfig.provider, llmConfig.model as never)
+      : createFauxModel(input.agentSlug);
+
+  if (!model) {
+    throw new Error(`Configured LLM model is not available: ${llmConfig.mode}`);
+  }
 
   return new Agent({
     initialState: {
       systemPrompt: [
         `You are ${input.agentName}, a visible AI collaborator in the ${input.roomName} project room.`,
         "Create draft tasks and documents only through tools.",
-        "Do not mark generated artifacts active. Humans approve drafts."
-      ].join("\n"),
-      model: faux.getModel(),
+        "Do not mark generated artifacts active. Humans approve drafts.",
+        input.collaborationContext
+          ? ["", "Room collaboration context:", input.collaborationContext].join("\n")
+          : ""
+      ]
+        .filter(Boolean)
+        .join("\n"),
+      model,
       thinkingLevel: "off",
       tools: input.tools
     },
     toolExecution: "sequential"
   });
+}
+
+function createFauxModel(agentSlug: string) {
+  const faux = registerFauxProvider({
+    provider: "feidingwei-faux",
+    tokenSize: { min: 12, max: 24 }
+  });
+  faux.setResponses(createDefaultFauxResponses(agentSlug));
+
+  return faux.getModel();
 }

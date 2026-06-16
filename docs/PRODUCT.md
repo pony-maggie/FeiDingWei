@@ -20,20 +20,47 @@ The MVP is an Agent Project Room where humans and visible AI agents collaborate 
 2. The user opens a project room.
 3. Team members discuss work in room chat.
 4. A user mentions an agent, such as `@PMAgent`.
-5. The agent uses room context and tools to create draft tasks or documents.
-6. Humans review and approve generated artifacts.
-7. Agent run history shows what happened and why.
+5. The room shows a generation plan before the agent runs.
+6. After human confirmation, the agent uses room context and tools to create draft tasks or documents.
+7. Humans review and approve generated artifacts.
+8. Agent run history shows what happened and why.
 
 ## MVP Feature Scope
 
 - Workspace shell.
 - Project room.
+- Local demo login and logout.
 - Chat.
 - Tasks.
 - Docs.
 - Default agents.
 - Agent run history.
 - Human approval for generated artifacts.
+
+## V2 Collaboration Direction
+
+V1 has been accepted as the first runnable project room. V2 upgrades the room from
+a single-user demo into a multi-user Agent collaboration workspace. The first V2
+steps add local demo authentication, workspace membership, room permissions,
+human `@user` mentions, a personal Inbox, and task/document assignment review
+flows. Seeded users can sign in, app pages are protected by a persisted session,
+room actions are guarded by role, chat can mention room members while preserving
+Agent mention previews, mentioned users can review unread/read notifications
+from the Inbox, and draft tasks/documents can be assigned, sent to a reviewer,
+approved by the requested reviewer, or returned with a visible revision reason.
+The People directory shows workspace members with role, function, team, and
+active room context. Users can create a new project room from the sidebar by
+entering a room name and description, selecting existing workspace members, and
+assigning room roles; the creator is always the room lead and every created room
+starts with the default visible Agents. Agents now receive room member,
+function, assignment, review, and blocker context so they can suggest assignees,
+suggest review handoffs, and summarize blockers without approving artifacts.
+Decision Log adds durable room decisions that humans can record directly and
+Agents can create as drafts, with trace links back to source messages and Agent
+runs. The V2 browser acceptance path now covers business, product, engineering,
+and QA moving work through chat, Inbox, generated drafts, review handoff,
+return-for-revision, decision recording, room creation with selected members,
+and Agent run traceability.
 
 ## Non-Goals
 

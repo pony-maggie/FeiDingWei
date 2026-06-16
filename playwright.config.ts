@@ -1,15 +1,23 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const port = process.env.PLAYWRIGHT_PORT ?? "3100";
+const baseURL = `http://127.0.0.1:${port}`;
+const reuseExistingServer = process.env.PLAYWRIGHT_REUSE_EXISTING === "1";
+
 export default defineConfig({
   testDir: "./tests/e2e",
   workers: 1,
   webServer: {
-    command: "npm run dev -- --hostname 127.0.0.1 --port 3100",
-    url: "http://127.0.0.1:3100",
-    reuseExistingServer: false
+    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+    url: baseURL,
+    reuseExistingServer,
+    env: {
+      ...process.env,
+      FEIDINGWEI_LLM_PROVIDER: "faux"
+    }
   },
   use: {
-    baseURL: "http://127.0.0.1:3100",
+    baseURL,
     trace: "on-first-retry"
   },
   projects: [

@@ -1,25 +1,43 @@
 "use client";
 
-import { Bot, FileText, ListChecks, MessageSquare } from "lucide-react";
+import { Bot, FileText, GitBranch, ListChecks, MessageSquare } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import type { Translation } from "@/lib/i18n";
+import type { LlmRuntimeConfig } from "@/lib/llm-config";
 import { AgentsPanel } from "./agents-panel";
 import { ChatPanel } from "./chat-panel";
+import { DecisionsPanel } from "./decisions-panel";
 import { DocsPanel } from "./docs-panel";
 import { TasksPanel } from "./tasks-panel";
 
-type Tab = "chat" | "tasks" | "docs" | "agents";
+type Tab = "chat" | "tasks" | "docs" | "decisions" | "agents";
 
 type RoomForTabs = {
   id: string;
   messages: React.ComponentProps<typeof ChatPanel>["room"]["messages"];
+  members: React.ComponentProps<typeof ChatPanel>["room"]["members"];
+  agents: React.ComponentProps<typeof ChatPanel>["room"]["agents"] &
+    React.ComponentProps<typeof AgentsPanel>["agents"];
   tasks: React.ComponentProps<typeof TasksPanel>["tasks"];
   documents: React.ComponentProps<typeof DocsPanel>["documents"];
-  agents: React.ComponentProps<typeof AgentsPanel>["agents"];
+  decisions: React.ComponentProps<typeof DecisionsPanel>["decisions"];
   agentRuns: React.ComponentProps<typeof AgentsPanel>["agentRuns"];
 };
 
-export function RoomTabs({ room, labels }: { room: RoomForTabs; labels: Translation }) {
+const defaultLlmConfig: LlmRuntimeConfig = {
+  mode: "faux",
+  reason: "Provider status is unavailable in this client render."
+};
+
+export function RoomTabs({
+  room,
+  labels,
+  llmConfig = defaultLlmConfig
+}: {
+  room: RoomForTabs;
+  labels: Translation;
+  llmConfig?: LlmRuntimeConfig;
+}) {
   const [activeTab, setActiveTab] = useState<Tab>("chat");
   const tabs: { id: Tab; label: string; icon: ReactNode }[] = [
     {
@@ -36,6 +54,11 @@ export function RoomTabs({ room, labels }: { room: RoomForTabs; labels: Translat
       id: "docs",
       label: labels.tabs.docs,
       icon: <FileText className="h-4 w-4" aria-hidden="true" />
+    },
+    {
+      id: "decisions",
+      label: labels.tabs.decisions,
+      icon: <GitBranch className="h-4 w-4" aria-hidden="true" />
     },
     {
       id: "agents",
@@ -61,10 +84,22 @@ export function RoomTabs({ room, labels }: { room: RoomForTabs; labels: Translat
         ))}
       </div>
       {activeTab === "chat" ? <ChatPanel room={room} labels={labels.chat} /> : null}
-      {activeTab === "tasks" ? <TasksPanel tasks={room.tasks} labels={labels.tasks} /> : null}
-      {activeTab === "docs" ? <DocsPanel documents={room.documents} labels={labels.docs} /> : null}
+      {activeTab === "tasks" ? (
+        <TasksPanel tasks={room.tasks} members={room.members} labels={labels.tasks} />
+      ) : null}
+      {activeTab === "docs" ? (
+        <DocsPanel documents={room.documents} members={room.members} labels={labels.docs} />
+      ) : null}
+      {activeTab === "decisions" ? (
+        <DecisionsPanel roomId={room.id} decisions={room.decisions} labels={labels.decisions} />
+      ) : null}
       {activeTab === "agents" ? (
-        <AgentsPanel agents={room.agents} agentRuns={room.agentRuns} labels={labels.agents} />
+        <AgentsPanel
+          agents={room.agents}
+          agentRuns={room.agentRuns}
+          labels={labels.agents}
+          llmConfig={llmConfig}
+        />
       ) : null}
     </div>
   );

@@ -2,20 +2,14 @@
 
 开源的 Agent 原生团队协作空间。
 
-飞钉微不是再造一个飞书、钉钉或企业微信。它先做一个让人和 AI Agent 在同一个项目空间里协作的开源办公平台：讨论、总结、生成任务草稿、生成文档草稿、人工批准，并留下可追踪的 Agent 运行记录。
+飞钉微的长期目标很直接：在团队协作软件这个问题上，正面对标飞书、钉钉、企业微信这三个不开源的巨头，但用开源、可私有化、以 Agent 为核心的方式重做。
+
+它不是先复制 IM、OA、审批和企业管理套件，而是先把团队工作的中心从“人组织人”改成“Agent 组织工作，人负责目标、判断、批准和责任”。在飞钉微里，人不是默认最重要的界面中心；Agent 是一等协作者和执行单元，所有 Agent 产出都必须可追踪、可审查、可被人批准或拒绝。
+
+当前版本先落在一个可运行的 Agent Project Room：人和 AI Agent 在同一个项目空间里协作，讨论、总结、生成任务草稿、生成文档草稿、请求评审、记录决策，并留下可追踪的 Agent 运行记录。
 
 English version: [README.en.md](README.en.md)
 
-## 当前形态
-
-当前 v0 是纯 Web 端应用：
-
-- Next.js Web App。
-- Prisma + SQLite 本地数据库。
-- Pi agent runtime。
-- 浏览器访问项目房间。
-
-目前没有桌面端、移动端 App，也没有接入企业 IM 客户端。后续可以在现有 Web/API 基础上扩展移动端、桌面端、企业身份、消息通知和企业 IM 集成。
 
 ## 部署方式
 
@@ -30,43 +24,37 @@ English version: [README.en.md](README.en.md)
 
 v0 默认不需要大模型 API key。
 
-当前实现使用 Pi 的 faux provider 做确定性本地运行，所以 `@PMAgent` 可以在没有外部模型服务的情况下生成测试用任务和文档草稿。这是为了先验证产品流程和工程结构。
+默认配置使用 faux provider 做确定性本地运行，所以 `@PMAgent` 可以在没有外部模型服务的情况下生成测试用任务和文档草稿。这是为了先验证产品流程和工程结构。
 
-后续接真实模型时，可以在现有 Pi runtime adapter 上添加 provider 配置，例如：
+如果要验收真实模型调用，可以在 `.env` 中开启 OpenAI provider：
 
-- `OPENAI_API_KEY`
+```env
+FEIDINGWEI_LLM_PROVIDER="openai"
+OPENAI_API_KEY="sk-..."
+FEIDINGWEI_LLM_MODEL="gpt-5.5"
+```
+
+配置真实 provider 后，Agent 仍通过同一条底层 runtime 链路执行，生成内容仍然只能进入任务/文档草稿，并且仍需要人工编辑、批准或拒绝。API key 只从服务端环境变量读取，不会展示在前端或写入 Agent run 记录。
+
+后续可以继续扩展：
+
 - `ANTHROPIC_API_KEY`
 - `GEMINI_API_KEY`
 - 企业内部 OpenAI-compatible endpoint
 
-## MVP 功能
-
-第一版实现 Agent Project Room：
-
-- 工作区壳层。
-- 项目房间。
-- 对话。
-- 任务。
-- 文档。
-- 默认智能体。
-- Agent 运行记录。
-- Agent 生成内容需要人工批准。
-- 设置菜单中的中文和英文界面切换。
-
-核心流程：
-
-```text
-项目房间对话 -> @PMAgent -> 任务/文档草稿 -> 人工批准 -> 可见运行记录
-```
-
 ## Agent Runtime
 
-飞钉微复用 Pi 做通用 Agent 基础设施：
+飞钉微的 Agent Runtime 不是把 Agent 当成一个隐藏在后台的聊天机器人，而是把每次 Agent 工作拆成一条可记录、可审查、可回放的执行链路：
 
-- `@earendil-works/pi-ai`：模型/provider 抽象、tool-call 消息类型、确定性 faux local runs。
-- `@earendil-works/pi-agent-core`：有状态 Agent 执行和工具调用。
+- 用户在房间消息里 mention 可见 Agent，前端先生成计划预览，不立即执行。
+- 用户确认后，服务端保存触发消息，并创建一条 `AgentRun` 记录，状态从 `running` 到 `completed` 或 `failed`。
+- Runtime 会把房间上下文、当前成员、角色、任务、文档、评审、阻塞项和最近决策组织进 Agent 输入。
+- 模型层只负责基于上下文决定要说什么、要调用什么工具；产品层只暴露受控工具，例如创建任务草稿、文档草稿和决策草稿。
+- 工具调用按顺序执行，所有生成结果默认是 `draft`，不会直接变成正式任务、正式文档或正式决策。
+- 每个生成产物都会保存来源消息和来源 Agent run，用户可以在任务、文档、决策和 Agents 页追溯它从哪里来。
+- 没有真实模型 key 时，runtime 使用确定性的 faux provider 跑同一条链路，方便本地开发、测试和演示。
 
-飞钉微自身只负责产品层：项目房间、消息、任务、文档、批准流程、运行记录和 Web UI。
+这个边界很重要：模型/provider、tool-call 消息和有状态执行是底层运行时问题；房间、消息、权限、任务、文档、审批、决策、可见运行记录和 Web UI 是飞钉微的产品问题。
 
 ## 环境要求
 
@@ -113,48 +101,14 @@ npm run dev
 http://127.0.0.1:3000
 ```
 
+本地 seed 会创建这些演示登录用户：
+
+- `founder@feidingwei.local`
+- `business@feidingwei.local`
+- `product@feidingwei.local`
+- `engineer@feidingwei.local`
+- `qa@feidingwei.local`
+
+当前 v2 协作迭代先使用本地演示登录，不包含密码、企业 SSO 或外部身份提供商。
+
 Playwright E2E 使用 `http://127.0.0.1:3100`，避免和本地开发服务冲突。
-
-## 验证
-
-运行单元、服务、API 和组件测试：
-
-```bash
-npm run test
-```
-
-运行 TypeScript 检查：
-
-```bash
-npm run lint
-```
-
-运行生产构建：
-
-```bash
-npm run build
-```
-
-运行浏览器 E2E：
-
-```bash
-npm run test:e2e
-```
-
-运行标准 harness 入口：
-
-```bash
-./init.sh
-```
-
-## 迭代管理
-
-开发状态通过这些文件追踪：
-
-- `feature_list.json`：feature 状态的 source of truth。
-- `progress.md`：会话进度记录。
-- `session-handoff.md`：重启/交接说明。
-- `clean-state-checklist.md`：提交和会话结束前检查。
-- `quality-document.md`：里程碑质量评估。
-
-每次只做一个 feature，并在标记为 `pass` 前记录验证证据。

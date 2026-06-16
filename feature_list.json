@@ -119,6 +119,168 @@
       "status": "pass",
       "evidence": "Root cause confirmed with browser text dump: locale state only affected RoomTabs while AppShell and seed/demo content stayed in their original language. Added ProjectRoom regression test first, then implemented whole-room locale state, AppShell Settings menu, known seed/demo content localization, and updated E2E. Verified npm run prisma:seed && npm run test (12 files, 28 tests passed), npm run lint, npm run build, npm audit --json (0 vulnerabilities), npm run test:e2e (2 passed), and local smoke at http://127.0.0.1:3100 confirming default Chinese content and Settings -> English switching.",
       "planReference": "docs/superpowers/plans/2026-06-07-bilingual-ui-and-readme.md"
+    },
+    {
+      "id": "feat-014-agent-mention-ux",
+      "name": "Agent Mention Discoverability",
+      "description": "Show each visible agent's chat mention token and suggest current room agents when the user types @ in the chat box.",
+      "dependencies": ["feat-013-language-consistency-settings"],
+      "status": "pass",
+      "evidence": "Added failing RoomTabs regression tests for @ suggestions and @PMAgent visibility, then implemented canonical mention tokens, chat @ suggestions, and agent/activity token display. Updated E2E to cover @ suggestion insertion and token visibility. Verified targeted RoomTabs test (3 passed), npm run test (12 files, 29 tests passed), npm run lint, npm run build, PLAYWRIGHT_REUSE_EXISTING=1 npm run test:e2e (2 passed), and ./init.sh (lint, 29 tests, build passed).",
+      "planReference": "Manual UX review follow-up on 2026-06-07"
+    },
+    {
+      "id": "feat-015-agent-run-traceability",
+      "name": "Agent Run And Artifact Traceability",
+      "description": "Show source messages, source runs, and generated artifacts across tasks, docs, and agent activity.",
+      "dependencies": ["feat-014-agent-mention-ux"],
+      "status": "pass",
+      "evidence": "Added failing room-service, localized-room, RoomTabs, and E2E coverage first, then implemented trace metadata enrichment, localization preservation, task/doc provenance blocks, and agent activity generated-artifact summaries. Verified npm run test (13 files, 31 tests passed), npm run lint, npm run build, PLAYWRIGHT_REUSE_EXISTING=1 npm run test:e2e (2 passed), ./init.sh (lint, 31 tests, build passed), and npm audit --json (0 vulnerabilities).",
+      "planReference": "docs/superpowers/plans/2026-06-07-agent-run-traceability.md"
+    },
+    {
+      "id": "feat-016-draft-edit-reject",
+      "name": "Draft Edit And Reject",
+      "description": "Allow humans to edit or reject draft tasks and documents before approval.",
+      "dependencies": ["feat-015-agent-run-traceability"],
+      "status": "pass",
+      "evidence": "Added failing service, API, component, and E2E regression coverage first, then implemented draft task/document edit and reject controls, rejected artifact status, draft-only mutation guards, 409 conflict responses for stale non-draft mutations, pending UI action protection, and stable accessible artifact-card names. Verified npm run test (13 files, 46 tests passed), npm run lint, npm run build, PLAYWRIGHT_REUSE_EXISTING=1 npm run test:e2e (2 passed), ./init.sh (lint, 46 tests, build passed), and npm audit --json (0 vulnerabilities).",
+      "planReference": "Inline continuation after local MVP review on 2026-06-07"
+    },
+    {
+      "id": "feat-017-real-llm-provider-config",
+      "name": "Real LLM Provider Config",
+      "description": "Allow optional real OpenAI model execution through Pi runtime while preserving deterministic faux-provider behavior when no API key is configured.",
+      "dependencies": ["feat-016-draft-edit-reject"],
+      "status": "pass",
+      "evidence": "Added failing LLM config, Pi runtime, agent-service redaction, and README contract tests first, then implemented server-side FEIDINGWEI_LLM_PROVIDER/FEIDINGWEI_LLM_MODEL selection, no-key faux fallback, OpenAI gpt-5.5 model selection through Pi, and API key redaction for failed Agent run errors. Updated .env.example, README.md, README.en.md, architecture, and reliability docs. Verified targeted tests (3 files, 10 tests passed), npm run test (14 files, 50 tests passed), npm run lint, npm run build, PLAYWRIGHT_REUSE_EXISTING=1 npm run test:e2e (2 passed), ./init.sh (lint, 50 tests, build passed), and npm audit --json (0 vulnerabilities).",
+      "planReference": "Inline continuation after local MVP review on 2026-06-07"
+    },
+    {
+      "id": "feat-018-agent-run-details-provider-status",
+      "name": "Agent Run Details And Provider Status",
+      "description": "Make agent execution feel product-ready by showing current provider/model mode, run detail records, tool/artifact summaries, and failure-safe run metadata.",
+      "dependencies": ["feat-017-real-llm-provider-config"],
+      "status": "pass",
+      "evidence": "Added failing RoomTabs coverage first for provider/model status, expandable run details, and redacted failed-run errors. Implemented Agents tab provider status, run detail expansion, run ID/input/output/error fields, generated artifact status badges, server-side llmConfig propagation, and deterministic faux-provider E2E webServer config. Verified targeted RoomTabs test (1 file, 6 tests passed), npm run lint, PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed), npm run test (15 files, 53 tests passed), npm run build, npm audit --json (0 vulnerabilities), git diff --check, ./init.sh (lint, 53 tests, build passed), and local HTTP smoke at http://127.0.0.1:3100.",
+      "planReference": "Productization pass after local MVP review on 2026-06-07"
+    },
+    {
+      "id": "feat-019-local-room-data-export",
+      "name": "Local Room Data Export",
+      "description": "Add a safe local data management entry that exports the current project room as JSON for self-hosted backup, debugging, and open source issue reproduction.",
+      "dependencies": ["feat-018-agent-run-details-provider-status"],
+      "status": "pass",
+      "evidence": "Added failing room export and ProjectRoom Settings coverage first, then implemented versioned room JSON export, stable export filenames, Settings-menu export action, no-secret LLM runtime metadata in exports, README documentation, and E2E coverage for the export entry. Verified targeted export/README tests (3 files, 6 tests passed), npm run lint, PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed), npm run test (16 files, 56 tests passed), npm run build, npm audit --json (0 vulnerabilities), git diff --check, and ./init.sh (lint, 56 tests, build passed).",
+      "planReference": "Productization pass after local MVP review on 2026-06-07"
+    },
+    {
+      "id": "feat-020-agent-generation-plan-preview",
+      "name": "Agent Generation Plan Preview",
+      "description": "Show a confirmation preview before running a mentioned agent so users can review the planned draft task/document generation before execution.",
+      "dependencies": ["feat-019-local-room-data-export"],
+      "status": "pass",
+      "evidence": "Added failing RoomTabs coverage first for mentioned-agent generation preview, no API call before confirmation, and confirmed reuse of the existing message API. Implemented ChatPanel generation plan preview, confirm/cancel actions, localized labels, README/product/architecture/reliability documentation, clean-state checklist updates, and E2E coverage for preview-before-run. Verified targeted RoomTabs/README tests (2 files, 9 tests passed), npm run lint, PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed), npm run test (16 files, 57 tests passed), npm run build, npm audit --json (0 vulnerabilities), git diff --check, and ./init.sh (lint, 57 tests, build passed).",
+      "planReference": "Productization pass after local MVP review on 2026-06-07"
+    },
+    {
+      "id": "feat-021-auth-session",
+      "name": "Auth And Session",
+      "description": "Add login, logout, session persistence, current user loading, and protected app pages for V2 collaboration.",
+      "dependencies": ["feat-020-agent-generation-plan-preview"],
+      "status": "pass",
+      "evidence": "Added failing auth-service and LoginForm tests first, then implemented Prisma Session model, local demo users, auth service, login API, logout route, login page, protected root/room pages, account display, and E2E login setup. Updated README/product/architecture/reliability docs and clean-state checklist. Resolved npm audit regression by updating esbuild override to 0.28.1. Verified npm run prisma:seed, targeted auth/login tests (2 files, 7 tests passed), npm run test (18 files, 64 tests passed), npm run lint, npm run build, npm audit --json (0 vulnerabilities), PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed across desktop and mobile), and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-1-feat-021-auth-session"
+    },
+    {
+      "id": "feat-022-workspace-membership-roles",
+      "name": "Workspace Membership And Roles",
+      "description": "Add workspace members, workspace roles, function labels, and lightweight teams.",
+      "dependencies": ["feat-021-auth-session"],
+      "status": "pass",
+      "evidence": "Added failing member-service and ProjectRoom role display tests first, then implemented workspace role/function schemas, Team model, Membership functionLabel/team fields, deterministic team/member seed data, member-service workspace member summaries, and current-user workspace role/function/team display in the app shell. Verified targeted member/project-room tests, npm run test (19 files, 68 tests passed), npm run lint, npm run build, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-2-feat-022-workspace-membership-roles"
+    },
+    {
+      "id": "feat-023-room-membership-permissions",
+      "name": "Room Membership And Permissions",
+      "description": "Add room members, room roles, and authorization guards for room access and mutations.",
+      "dependencies": ["feat-022-workspace-membership-roles"],
+      "status": "pass",
+      "evidence": "Added failing access-control tests first, then implemented roomRole schema, RoomMembership model, seeded room roles, access-control helpers, room page read guard, authenticated message authoring, Agent execution guard, and task/document edit/approval/reject permission checks. Updated route tests for authenticated requests. Verified access/route/auth tests, npm run test (20 files, 73 tests passed), npm run lint, npm run build, PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed), and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-3-feat-023-room-membership-permissions"
+    },
+    {
+      "id": "feat-024-multi-user-chat-mentions",
+      "name": "Multi-User Chat And Mentions",
+      "description": "Use the authenticated user as message author and add human @mentions with notifications while preserving Agent mention previews.",
+      "dependencies": ["feat-023-room-membership-permissions"],
+      "status": "pass",
+      "evidence": "Added failing mention-service, RoomTabs, and API route coverage first, then implemented Notification model, human mention parsing, room-member mention suggestions, authenticated message notification fanout, and E2E coverage for @product plain messages while preserving @PMAgent generation previews. Verified mention/room-tabs/route tests (3 files, 22 tests passed), npm run test (21 files, 78 tests passed), npm run lint, npm run build, PLAYWRIGHT_PORT=3101 npm run test:e2e (2 passed), git diff --check, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-4-feat-024-multi-user-chat-mentions"
+    },
+    {
+      "id": "feat-025-inbox-notifications",
+      "name": "Inbox And Notifications",
+      "description": "Add a personal Inbox for mentions, assignments, review requests, Agent outcomes, and returned drafts.",
+      "dependencies": ["feat-024-multi-user-chat-mentions"],
+      "status": "pass",
+      "evidence": "Added failing notification-service, InboxPanel, API route, AppShell, and E2E coverage first, then implemented V2 notification types, optional notification links to task/document/agent run, notification-service create/list/read functions, recipient-only mark-read API, /inbox page, sidebar Inbox entry, and README/product/architecture/reliability docs. Verified notification/inbox/project-room/route tests (4 files, 20 tests passed), npm run prisma:seed && npm run test (23 files, 84 tests passed), npm run lint, npm run build, PLAYWRIGHT_PORT=3101 npm run test:e2e (4 passed), git diff --check, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-5-feat-025-inbox-notifications"
+    },
+    {
+      "id": "feat-026-task-doc-assignment-review",
+      "name": "Task And Document Assignment Review",
+      "description": "Add assignees, reviewers, review state, comments, blocked reasons, and return-for-revision flows for tasks and documents.",
+      "dependencies": ["feat-025-inbox-notifications"],
+      "status": "pass",
+      "evidence": "Added failing review-service, API route, component, and E2E coverage first, then implemented task assignees, document owners, requested reviewers, reviewStatus transitions, reviewer-gated approval, return-for-revision comments, blocked/revision reasons, and assignment/review notifications. Verified targeted review/route/RoomTabs tests (3 files, 36 tests passed), blocked reason target tests (2 files, 18 tests passed), npm run prisma:seed && npm run test (24 files, 100 tests passed), npm run lint, npm run build, and PLAYWRIGHT_PORT=3101 npm run test:e2e (4 passed).",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-6-feat-026-task-doc-assignment-review"
+    },
+    {
+      "id": "feat-027-people-directory-light-org",
+      "name": "People Directory And Light Org",
+      "description": "Add a lightweight People directory showing workspace members, roles, function labels, teams, and active rooms.",
+      "dependencies": ["feat-026-task-doc-assignment-review"],
+      "status": "pass",
+      "evidence": "Added failing member-service and PeopleDirectory tests first, then implemented workspace-scoped active room summaries, PeopleDirectory member cards, protected /people page, sidebar People navigation, and E2E coverage for opening People from the room. Fixed test isolation by cleaning up temporary external workspace data. Verified targeted People/member/project-room tests (3 files, 9 tests passed), npm run prisma:seed && npm run test (25 files, 103 tests passed), npm run lint, npm run build, and PLAYWRIGHT_PORT=3101 npm run test:e2e (4 passed).",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-7-feat-027-people-directory-light-org"
+    },
+    {
+      "id": "feat-028-agent-member-aware-context",
+      "name": "Agent Member-Aware Context",
+      "description": "Extend Agent context and tools so Agents understand members, roles, function labels, assignments, review requests, blockers, and recent decisions.",
+      "dependencies": ["feat-027-people-directory-light-org"],
+      "status": "pass",
+      "evidence": "Added failing agent-tools, agent-service, and RoomTabs coverage first, then implemented room-scoped member-aware Agent context, prompt injection, assignee suggestion tool, review request suggestion tool, blocker summary tool, and Agent run collaboration summaries for generated artifacts. Verified targeted agent/RoomTabs tests (3 files, 23 tests passed), npm run prisma:seed && npm run test (25 files, 108 tests passed), npm run lint, npm run build, and PLAYWRIGHT_PORT=3101 npm run test:e2e (4 passed).",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-8-feat-028-agent-member-aware-context"
+    },
+    {
+      "id": "feat-029-decision-log",
+      "name": "Decision Log",
+      "description": "Add durable decisions that can be created by humans or Agents and traced to source messages and Agent runs.",
+      "dependencies": ["feat-028-agent-member-aware-context"],
+      "status": "pass",
+      "evidence": "Added failing decision-service, agent-tools, room-export, RoomTabs, API route, and E2E coverage first, then implemented Decision model/migration, decision-service, human decision API, Decisions tab, Agent create_draft_decision tool, decision trace metadata, room export decisions, and generated-decision summaries in Agents. Verified targeted decision/tool/route/RoomTabs/export tests (5 files, 40 tests passed), npm run lint, npm run build, npm run prisma:seed && npm run test && PLAYWRIGHT_PORT=3101 npm run test:e2e (26 files, 113 tests passed; 4 Playwright tests passed), git diff --check, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-9-feat-029-decision-log"
+    },
+    {
+      "id": "feat-030-collaboration-e2e",
+      "name": "V2 Collaboration E2E",
+      "description": "Add end-to-end coverage for the business-product-engineering-QA collaboration workflow across login, chat, Agent generation, assignments, reviews, Inbox, People, Decisions, and traceability.",
+      "dependencies": ["feat-029-decision-log"],
+      "status": "pass",
+      "evidence": "Added failing collaboration E2E coverage first, then implemented tests/e2e/collaboration.spec.ts for business -> product -> engineering -> QA workflow and adjusted reviewer permissions so QA/reviewer users can execute review Agents while viewers remain read-only. Updated README/product/architecture/reliability/clean-state docs for V2 collaboration and permissions. Verified access-control targeted test (1 file, 6 tests passed), collaboration E2E single-file run (1 passed), npm run prisma:seed && npm run test (26 files, 114 tests passed), npm run lint, npm run build, npm audit --json (0 vulnerabilities), PLAYWRIGHT_PORT=3101 npm run test:e2e (5 passed, 1 skipped for mobile-only collaboration flow), git diff --check, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-14-feidingwei-v2-collaboration-implementation.md#task-10-feat-030-collaboration-e2e"
+    },
+    {
+      "id": "feat-031-room-creation-membership",
+      "name": "Room Creation And Membership",
+      "description": "Make the sidebar new-room action usable by creating project rooms with selected workspace members, room roles, accessible room lists, and default room Agents.",
+      "dependencies": ["feat-030-collaboration-e2e"],
+      "status": "pass",
+      "evidence": "Added failing room-service, API route, ProjectRoom/AppShell component, and Playwright E2E coverage first, then implemented accessible room listing, createProjectRoomWithMembers transaction, creator workspace-membership guard, authenticated POST /api/rooms, sidebar accessible room links, create-time member/role selection, creator room_lead enforcement, current-user filtering from inviteable members, default Agents for created rooms, root redirect to first accessible room, and documentation. Verified targeted service/API/component tests (3 files, 41 tests), room creation E2E (1 passed, 1 mobile skip), npm run prisma:seed && npm run test (26 files, 122 tests), npm run lint, npm run build, PLAYWRIGHT_PORT=3101 npm run test:e2e (6 passed, 2 skipped), git diff --check, and ./init.sh.",
+      "planReference": "docs/superpowers/plans/2026-06-15-room-creation-membership.md"
     }
   ]
 }

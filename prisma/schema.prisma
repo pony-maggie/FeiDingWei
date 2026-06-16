@@ -12,10 +12,31 @@ model User {
   name        String
   email       String       @unique
   memberships Membership[]
+  roomMemberships RoomMembership[]
+  receivedNotifications Notification[] @relation("NotificationRecipient")
+  actedNotifications Notification[] @relation("NotificationActor")
+  sessions    Session[]
   messages    Message[]
   tasks       Task[]       @relation("TaskAssignee")
+  taskReviews Task[]       @relation("TaskReviewer")
+  documentOwnerships Document[] @relation("DocumentOwner")
+  documentReviews Document[] @relation("DocumentReviewer")
+  decisions   Decision[]   @relation("DecisionCreator")
+  taskComments TaskComment[]
+  documentComments DocumentComment[]
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  @@index([userId])
+  @@index([expiresAt])
 }
 
 model Workspace {
@@ -23,17 +44,33 @@ model Workspace {
   name        String
   memberships Membership[]
   rooms       ProjectRoom[]
+  teams       Team[]
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model Team {
+  id          String       @id @default(cuid())
+  name        String
+  workspaceId String
+  workspace   Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  memberships Membership[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@unique([name, workspaceId])
 }
 
 model Membership {
   id          String    @id @default(cuid())
   role        String
+  functionLabel String @default("product")
   userId      String
   workspaceId String
+  teamId      String?
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  team        Team?     @relation(fields: [teamId], references: [id], onDelete: SetNull)
 
   @@unique([userId, workspaceId])
 }
@@ -44,13 +81,30 @@ model ProjectRoom {
   description String
   workspaceId String
   workspace   Workspace   @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  roomMemberships RoomMembership[]
   messages    Message[]
+  notifications Notification[]
   tasks       Task[]
   documents   Document[]
+  decisions   Decision[]
   agents      Agent[]
   agentRuns   AgentRun[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+}
+
+model RoomMembership {
+  id        String      @id @default(cuid())
+  role      String
+  userId    String
+  roomId    String
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  room      ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  @@unique([userId, roomId])
+  @@index([roomId])
 }
 
 model Message {
@@ -62,7 +116,40 @@ model Message {
   author    User?       @relation(fields: [authorId], references: [id], onDelete: SetNull)
   agent     Agent?      @relation(fields: [agentId], references: [id], onDelete: SetNull)
   room      ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  notifications Notification[]
+  decisions Decision[] @relation("DecisionSourceMessage")
   createdAt DateTime    @default(now())
+}
+
+model Notification {
+  id          String      @id @default(cuid())
+  type        String
+  status      String
+  title       String
+  body        String
+  recipientId String
+  actorId     String?
+  roomId      String
+  messageId   String?
+  taskId      String?
+  documentId  String?
+  agentRunId  String?
+  recipient   User        @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+  actor       User?       @relation("NotificationActor", fields: [actorId], references: [id], onDelete: SetNull)
+  room        ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  message     Message?    @relation(fields: [messageId], references: [id], onDelete: Cascade)
+  task        Task?       @relation(fields: [taskId], references: [id], onDelete: SetNull)
+  document    Document?   @relation(fields: [documentId], references: [id], onDelete: SetNull)
+  agentRun    AgentRun?   @relation(fields: [agentRunId], references: [id], onDelete: SetNull)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([recipientId, status])
+  @@index([roomId])
+  @@index([messageId])
+  @@index([taskId])
+  @@index([documentId])
+  @@index([agentRunId])
 }
 
 model Task {
@@ -73,13 +160,34 @@ model Task {
   priority        String
   artifactStatus  String
   assigneeId      String?
+  reviewerId      String?
+  reviewStatus    String      @default("none")
+  dueDate         DateTime?
+  blockedReason   String?
   sourceMessageId String?
   sourceRunId     String?
   roomId          String
   assignee        User?       @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  reviewer        User?       @relation("TaskReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
   room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  notifications   Notification[]
+  comments        TaskComment[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  body      String
+  taskId    String
+  authorId  String?
+  task      Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  author    User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([taskId])
+  @@index([authorId])
 }
 
 model Document {
@@ -87,12 +195,57 @@ model Document {
   title           String
   body            String
   artifactStatus  String
+  ownerId         String?
+  reviewerId      String?
+  reviewStatus    String      @default("none")
+  dueDate         DateTime?
+  blockedReason   String?
   sourceMessageId String?
   sourceRunId     String?
   roomId          String
+  owner           User?       @relation("DocumentOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  reviewer        User?       @relation("DocumentReviewer", fields: [reviewerId], references: [id], onDelete: SetNull)
   room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  notifications   Notification[]
+  comments        DocumentComment[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
+}
+
+model DocumentComment {
+  id         String   @id @default(cuid())
+  body       String
+  documentId String
+  authorId   String?
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([documentId])
+  @@index([authorId])
+}
+
+model Decision {
+  id              String      @id @default(cuid())
+  title           String
+  body            String
+  status          String
+  creatorId       String?
+  roomId          String
+  sourceMessageId String?
+  sourceRunId     String?
+  creator         User?       @relation("DecisionCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  sourceMessage   Message?    @relation("DecisionSourceMessage", fields: [sourceMessageId], references: [id], onDelete: SetNull)
+  sourceRun       AgentRun?   @relation(fields: [sourceRunId], references: [id], onDelete: SetNull)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+
+  @@index([roomId])
+  @@index([creatorId])
+  @@index([sourceMessageId])
+  @@index([sourceRunId])
 }
 
 model Agent {
@@ -123,6 +276,8 @@ model AgentRun {
   sourceMessageId String?
   agent           Agent       @relation(fields: [agentId], references: [id], onDelete: Cascade)
   room            ProjectRoom @relation(fields: [roomId], references: [id], onDelete: Cascade)
+  notifications   Notification[]
+  decisions       Decision[]
   createdAt       DateTime    @default(now())
   updatedAt       DateTime    @updatedAt
 }

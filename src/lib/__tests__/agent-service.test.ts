@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { prisma } from "../db";
-import { createMessageAndMaybeRunAgent, extractAssistantText } from "../agent-service";
-import { createDefaultFauxResponses } from "../pi-runtime";
+import {
+  buildRoomAgentCollaborationContext,
+  createMessageAndMaybeRunAgent,
+  extractAssistantText,
+  sanitizeAgentRunError
+} from "../agent-service";
+import { createDefaultFauxResponses, createRoomAgent } from "../pi-runtime";
 import { getDefaultRoomId } from "../room-service";
 
 describe("pi-backed agent service helpers", () => {
@@ -20,6 +25,31 @@ describe("pi-backed agent service helpers", () => {
     expect(first.content.filter((block) => block.type === "toolCall")).toHaveLength(1);
   });
 
+  it("creates a Pi agent with an OpenAI model when configured", () => {
+    const agent = createRoomAgent({
+      agentSlug: "pm-agent",
+      agentName: "PM Agent",
+      roomName: "Launch Room",
+      tools: [],
+      llmConfig: { mode: "openai", provider: "openai", model: "gpt-5.5" }
+    });
+
+    expect(agent.state.model.provider).toBe("openai");
+    expect(agent.state.model.id).toBe("gpt-5.5");
+  });
+
+  it("adds member-aware collaboration context to the agent system prompt", () => {
+    const agent = createRoomAgent({
+      agentSlug: "pm-agent",
+      agentName: "PM Agent",
+      roomName: "Launch Room",
+      tools: [],
+      collaborationContext: "Current user: Product <product@feidingwei.local>"
+    });
+
+    expect(agent.state.systemPrompt).toContain("Current user: Product <product@feidingwei.local>");
+  });
+
   it("extracts assistant text from Pi agent messages", () => {
     const text = extractAssistantText([
       { role: "user", content: "hello" },
@@ -34,9 +64,53 @@ describe("pi-backed agent service helpers", () => {
 
     expect(text).toBe("Agent completed the run.");
   });
+
+  it("redacts API keys from persisted agent run errors", () => {
+    const sanitized = sanitizeAgentRunError("OpenAI request failed for key sk-test-secret-value.");
+
+    expect(sanitized).toBe("OpenAI request failed for key [REDACTED_API_KEY].");
+    expect(sanitized).not.toContain("sk-test-secret-value");
+  });
 });
 
 describe("pi-backed agent orchestration", () => {
+  it("builds member-aware room context for agents", async () => {
+    const roomId = await getDefaultRoomId();
+    const product = await prisma.user.findUniqueOrThrow({
+      where: { email: "product@feidingwei.local" }
+    });
+    const engineer = await prisma.user.findUniqueOrThrow({
+      where: { email: "engineer@feidingwei.local" }
+    });
+    const qa = await prisma.user.findUniqueOrThrow({
+      where: { email: "qa@feidingwei.local" }
+    });
+    await prisma.task.create({
+      data: {
+        title: "Blocked API contract",
+        description: "Needs product input.",
+        status: "todo",
+        priority: "high",
+        artifactStatus: "draft",
+        assigneeId: engineer.id,
+        reviewerId: qa.id,
+        reviewStatus: "requested",
+        blockedReason: "Waiting for product decision.",
+        roomId: roomId!
+      }
+    });
+
+    const context = await buildRoomAgentCollaborationContext({
+      roomId: roomId!,
+      currentUserId: product.id
+    });
+
+    expect(context).toContain("Current user: Product <product@feidingwei.local>");
+    expect(context).toContain("QA <qa@feidingwei.local> roomRole=reviewer function=qa");
+    expect(context).toContain("Blocked API contract assignee=Engineer reviewer=QA review=requested");
+    expect(context).toContain("blocked=Waiting for product decision.");
+  });
+
   it("turns a PM Agent mention into draft tasks, a draft document, and a completed run", async () => {
     const roomId = await getDefaultRoomId();
     expect(roomId).toBeTypeOf("string");
@@ -50,7 +124,8 @@ describe("pi-backed agent orchestration", () => {
 
     const result = await createMessageAndMaybeRunAgent({
       roomId: roomId!,
-      body: "@PMAgent summarize this project room and create draft tasks"
+      body: "@PMAgent summarize this project room and create draft tasks",
+      llmConfig: { mode: "faux", reason: "Test uses deterministic faux provider." }
     });
 
     const afterTasks = await prisma.task.count({
